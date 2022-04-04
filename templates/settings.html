@@ -1,0 +1,54 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Car Parking System | Settings
+{% endblock %}
+
+{% block content%}
+<p class="h1">Settings</p>
+
+<div class="mb-3">
+    <form class="form-group mb-3">
+        <a href="/add-user" class="btn btn-primary">Add New User</a>
+    </form>
+    <table class="table" id="user_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Creation Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data: %}
+            {% for row in data: %}
+            <tr>
+                <td class="align-middle">{{ row[0] }}</td>
+                <td class="align-middle">{{ row[1] }}</td>
+                <td class="align-middle">{{ row[2] }}</td>
+                <td class="align-middle">{{ row[4] }}</td>
+                <td>
+                    <div class="form-group">
+                        <!-- <button type="button" class="btn btn-secondary">Edit</button>
+                        <button type="button" class="btn btn-danger">Delete</button> -->
+                        <a href="/edit/user?u_id={{ row[0] }}" class="btn btn-secondary">Edit</a>
+                        <a href="/delete/user?u_id={{ row[0] }}" class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#user_table').DataTable();
+    });
+</script>
+
+
+{% endblock%}

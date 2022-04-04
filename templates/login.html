@@ -5,32 +5,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/bulma.min.css">
+    <!-- <link rel="stylesheet" href="static/bulma.min.css"> -->
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <script src="/static/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="static/style.css">
 
     <title>Car Parking System | Login</title>
 </head>
 
 <body>
-    <div class="container is-max-desktop" id="login_div">
-        <div class="column is-two-fifths is-offset-one-quarter">
-            <form class="box">
-                <p class="title is-3">Car Parking System</p>
-                <div class="field">
-                    <label class="label">Username</label>
-                    <div class="control">
-                        <input class="input" type="text" placeholder="">
-                    </div>
+    <div class="container-sm full-screen-height" id="">
+        <div class="row justify-content-center">
+            <form class="col-4 p-3 center-vertical shadow" method="post">
+                <p class="h3">Car Parking System</p>
+                {% if error: %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+                {% endif %}
+                <div class="form-group mb-3">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="" name="username">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="" name="password">
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Sign In</button>
                 </div>
 
-                <div class="field">
-                    <label class="label">Password</label>
-                    <div class="control">
-                        <input class="input" type="password" placeholder="********">
-                    </div>
-                </div>
-
-                <button class="button is-primary">Sign in</button>
             </form>
         </div>
     </div>

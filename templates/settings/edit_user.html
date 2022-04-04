@@ -1,0 +1,32 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Edit User
+{% endblock %}
+
+{% block content %}
+<p class="h1">Edit User</p>
+<form action="/edit/user" method="post">
+    {% if data: %}
+    <div class="mb-3">
+        <label for="fullname" class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="fullname" id="fullname" value="{{ data[1] }}">
+    </div>
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" name="username" id="username" value="{{ data[2] }}">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">New Password</label>
+        <input type="password" class="form-control" name="password" id="password">
+    </div>
+    <div class="mb-3 row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Save">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div>
+    {% endif %}
+</form>
+{% endblock %}

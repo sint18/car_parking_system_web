@@ -1,0 +1,35 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Add New User
+{% endblock %}
+
+{% block content %}
+<p class="h1">Add New User</p>
+<form action="/add-user" method="post">
+    <div class="mb-3">
+        <label for="fullname" class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="fullname" id="fullname" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" name="username" id="username" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="confirm_password" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="">
+    </div>
+    <div class="mb-3 row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Add">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div>
+
+</form>
+{% endblock %}

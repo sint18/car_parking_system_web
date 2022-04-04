@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.5/datatables.min.css" />
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.5/datatables.min.js"></script>
+
+    <script src="/static/bootstrap.bundle.min.js"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-3 shadow mx-3">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link h1" style="color: black;">{{ session["user"] }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="true" aria-expanded="false">Vehicle Category</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">Settings</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li> -->
+                    <li class="nav-item mb-2">
+                        <form class="d-grid">
+                            <a class="btn btn-danger" href="/logout">Logout</a>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="col shadow mx-3 ">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
