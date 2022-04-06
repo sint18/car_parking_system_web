@@ -54,3 +54,13 @@ def insert_user(fullname: str, username: str, password: str):
 
     query = f"INSERT INTO `admin` (`id`, `fullname`, `username`, `password`) VALUES (NULL, '{fullname}', '{username}', '{password}')"
     cursor.execute(query)
+
+
+def update_user(user_id: int, fullname: str, username: str, new_password=""):
+
+    if new_password:
+        query = f"UPDATE `admin` SET `fullname` = '{fullname}', `username` = '{username}', `password` = '{new_password}' WHERE `admin`.`id` = {user_id}"
+    else:
+        query = f"UPDATE `admin` SET `fullname` = '{fullname}', `username` = '{username}' WHERE `admin`.`id` = {user_id}"
+
+    cursor.execute(query)

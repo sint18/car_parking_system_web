@@ -4,6 +4,9 @@ Car Parking System | Add New User
 {% endblock %}
 
 {% block content %}
+<button class="btn btn-secondary mb-3" onclick="history.back()"><img src="/static/icons/arrow-left-short.svg" alt=""
+        width="32" height="32">
+    Back</button>
 <p class="h1">Add New User</p>
 <form action="/add-user" method="post">
     <div class="mb-3">
@@ -22,7 +25,7 @@ Car Parking System | Add New User
         <label for="confirm_password" class="form-label">Confirm Password</label>
         <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="">
     </div>
-    <div class="mb-3 row">
+    <div class="row">
         <div class="col-3 d-grid">
             <input type="submit" class="btn btn-primary" value="Add">
         </div>

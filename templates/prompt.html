@@ -1,0 +1,27 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Confirmation
+{% endblock %}
+
+{% block content %}
+<form class="col-4 p-3 center-vertical shadow" method="post">
+    <p class="h3">Car Parking System</p>
+    {% if error: %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+    <div class="form-group mb-3">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="" name="username">
+    </div>
+    <div class="form-group mb-3">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="" name="password">
+    </div>
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Sign In</button>
+    </div>
+
+</form>
+{% endblock }

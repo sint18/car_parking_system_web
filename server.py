@@ -82,10 +82,29 @@ def delete(type):
 @app.route("/edit/<type>", methods=["GET", "POST"])
 def edit(type):
     if type == "user":
+        error = None
         u_id = request.args.get('u_id')
         data = []
         record = queries.get_user_by_id(u_id)
-        return render_template("settings/edit_user.html", data=record[0])
+
+        if request.method == "POST":
+            fullname = request.form["fullname"]
+            username = request.form["username"]
+            new_pass = request.form["new_password"]
+            old_pass = request.form["old_password"]
+
+            if not new_pass and not old_pass and fullname and username:
+                queries.update_user(u_id, fullname, username)
+                return redirect(url_for("settings"))
+            elif new_pass and old_pass and fullname and username:
+                if functions.get_hash(old_pass) == record[0][3]:
+                    queries.update_user(
+                        u_id, fullname, username, functions.get_hash(new_pass))
+                    return redirect(url_for("settings"))
+                else:
+                    error = "Incorrect old password"
+
+        return render_template("settings/edit_user.html", data=record[0], error=error)
 
 
 @app.route("/logout")

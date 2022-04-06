@@ -4,9 +4,14 @@ Car Parking System | Edit User
 {% endblock %}
 
 {% block content %}
+<button class="btn btn-secondary mb-3" onclick="history.back()"><img src="/static/icons/arrow-left-short.svg" alt=""
+        width="32" height="32">Back</button>
 <p class="h1">Edit User</p>
-<form action="/edit/user" method="post">
+<form action="/edit/user?u_id={{ data[0] }}" method="post" id="form">
     {% if data: %}
+    {% if error: %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
     <div class="mb-3">
         <label for="fullname" class="form-label">Full Name</label>
         <input type="text" class="form-control" name="fullname" id="fullname" value="{{ data[1] }}">
@@ -15,18 +20,49 @@ Car Parking System | Edit User
         <label for="username" class="form-label">Username</label>
         <input type="text" class="form-control" name="username" id="username" value="{{ data[2] }}">
     </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">New Password</label>
-        <input type="password" class="form-control" name="password" id="password">
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="editPassword">
+        <label for="editPassword" class="form-check-label">Change Password</label>
     </div>
-    <div class="mb-3 row">
+    <div id="passFields" style="display: none;">
+        <div class="mb-3">
+            <label for="password" class="form-label">New Password</label>
+            <input type="password" class="form-control" name="new_password" id="new_password">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Old Password</label>
+            <input type="password" class="form-control" name="old_password" id="old_password">
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-3 d-grid">
             <input type="submit" class="btn btn-primary" value="Save">
         </div>
         <div class="col-3 d-grid">
-            <input type="reset" class="btn btn-warning" value="Reset">
+            <input type="reset" onclick="hide()" class="btn btn-warning" value="Reset">
         </div>
     </div>
     {% endif %}
 </form>
+<script>
+    var editPass = document.getElementById('editPassword')
+    var passFields = document.getElementById('passFields')
+    editPass.addEventListener('change', function () {
+        if (editPass.checked == true) {
+            passFields.style.display = 'block'
+        } else {
+            passFields.style.display = 'none'
+
+        }
+    })
+
+    function hide() {
+        var passFields = document.getElementById('passFields')
+        passFields.style.display = 'none'
+    }
+
+
+</script>
+
 {% endblock %}
