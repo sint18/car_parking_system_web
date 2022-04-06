@@ -47,7 +47,6 @@ def settings():
     records = queries.get_user_list()
     if records:
         data = records
-    print(data)
     return render_template("settings.html", data=data)
 
 
@@ -107,7 +106,45 @@ def edit(type):
         return render_template("settings/edit_user.html", data=record[0], error=error)
 
 
-@app.route("/logout")
+@app.route("/vehicles")
+def vehicles():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    records = queries.get_parked_vehicles()
+    return render_template("vehicles/vehicles.html", data=records)
+
+
+@app.route("/vehicle-entry", methods=["GET", "POST"])
+def vehicle_entry():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    msg = None
+    categories = queries.get_categories()
+    if request.method == "POST":
+        cat_id = request.form["cat_id"]
+        reg_num = request.form["reg_num"]
+        if cat_id != "" and reg_num != "":
+            queries.insert_vehicles(cat_id, reg_num)
+            msg = f"New vehicle added with the reg no. {reg_num}"
+    return render_template("vehicles/vehicle_entry.html", data=categories, msg=msg)
+
+
+@app.route("/update-vehicle")
+def update_vehicle():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    vehicle_id = request.args.get("v_id")
+    record = queries.get_parked_vehicles_by_id(vehicle_id)
+    entry = record[0][3]  # entry time
+    exit = record[0][4]  # exit time
+    tdiff = exit - entry
+    fees = "test"
+    return render_template("vehicles/update_vehicle.html", data=record[0], fees=fees)
+
+
+@ app.route("/logout")
 def logout():
     session.pop("user")
     session.pop("u_id")

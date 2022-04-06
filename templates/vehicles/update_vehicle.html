@@ -1,0 +1,55 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Vehicle Exit
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-secondary mb-3" onclick="history.back()"><img src="/static/icons/arrow-left-short.svg" alt=""
+        width="32" height="32">
+    Back</button>
+<p class="h1">Vehicle Exit</p>
+<form action="" method="post">
+    <div class="mb-3">
+        <label for="v_id" class="form-label">Vehicle ID</label>
+        <input type="text" class="form-control" name="v_id" id="v_id" placeholder="" value="{{ data[0] }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="reg_num" class="form-label">Registration No.</label>
+        <input type="text" class="form-control" name="reg_num" id="reg_num" placeholder="" value="{{ data[2] }}"
+            readonly>
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" class="form-control" name="category" id="category" placeholder="" value="{{ data[1] }}"
+            readonly>
+    </div>
+    <div class="mb-3">
+        <label for="entry_time" class="form-label">Entry Time</label>
+        <input type="text" class="form-control" name="entry_time" id="entry_time" placeholder="" value="{{ data[3] }}"
+            readonly>
+    </div>
+    <div class="mb-3">
+        <label for="exit_time" class="form-label">Exit Time</label>
+        <input type="text" class="form-control" name="exit_time" id="exit_time" placeholder="" value="{{ data[4] }}"
+            readonly>
+    </div>
+    <div class="mb-3">
+        <label for="fees" class="form-label">Fees</label>
+        <input type="text" class="form-control" name="fees" id="fees" placeholder="" value="{{ fees }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="hours_parked" class="form-label">Hours Parked</label>
+        <input type="text" class="form-control" name="hours_parked" id="hours_parked" placeholder=""
+            value="{{ data[5] }}" readonly>
+    </div>
+    <div class="row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Add">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div>
+
+</form>
+{% endblock %}

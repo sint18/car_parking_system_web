@@ -1,0 +1,39 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Vehicle Entry
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-secondary mb-3" onclick="window.location.href='/vehicles'"><img
+        src="/static/icons/arrow-left-short.svg" alt="" width="32" height="32">
+    Back</button>
+<p class="h1">Vehicle Entry</p>
+<form action="/vehicle-entry" method="post">
+    {% if msg: %}
+    <div class="alert alert-success">{{ msg }}</div>
+    {% endif %}
+    <div class="mb-3">
+        <label for="reg_num" class="form-label">Registration Number</label>
+        <input type="text" class="form-control" name="reg_num" id="reg_num" placeholder="" required>
+    </div>
+    <div class="mb-3">
+        <label for="categorySel" class="form-label">Select Category</label>
+        <select class="form-select" id="categorySel" name="cat_id">
+            {% if data: %}
+            {% for row in data: %}
+            <option value="{{ row[0] }}">{{ row[1] }}</option>
+            {% endfor %}
+            {% endif %}
+        </select>
+    </div>
+    <div class="row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Add">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div>
+
+</form>
+{% endblock %}
