@@ -1,6 +1,5 @@
 
-from winreg import QueryInfoKey
-from flask import Flask, flash, redirect, request, session, url_for, render_template, jsonify
+from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 import functions
 import queries
@@ -79,25 +78,25 @@ def add_user():
     return render_template("settings/add_new_user.html")
 
 
-@app.route("/delete/<type>", methods=["GET", "POST"])
-def delete(type):
-    if type == "user":
+@app.route("/delete/<ltype>", methods=["GET", "POST"])
+def delete(ltype):
+    if ltype == "user":
         u_id = request.args.get('u_id')
 
         if u_id:
             queries.delete_user(int(u_id))
         return redirect(url_for("settings"))
 
-    if type == "category":
+    if ltype == "category":
         c_id = request.args.get("c_id")
         if c_id:
             queries.delete_category(c_id)
         return redirect(url_for("category"))
 
 
-@app.route("/edit/<type>", methods=["GET", "POST"])
-def edit(type):
-    if type == "user":
+@app.route("/edit/<ltype>", methods=["GET", "POST"])
+def edit(ltype):
+    if ltype == "user":
         error = None
         u_id = request.args.get('u_id')
         record = queries.get_user_by_id(u_id)
@@ -121,7 +120,7 @@ def edit(type):
 
         return render_template("settings/edit_user.html", data=record[0], error=error)
 
-    if type == "category":
+    if ltype == "category":
         error = None
         c_id = request.args.get("c_id")
         record = queries.get_category_by_id(c_id)
@@ -196,9 +195,9 @@ def update_vehicle():
 
     vehicle_id = request.args.get("v_id")
     record = queries.get_parked_vehicles_by_id(vehicle_id)
-    entry = record[0][3]  # entry time
-    exit = record[0][4]  # exit time
-    tdiff = exit - entry
+    entry_time = record[0][3]  # entry time
+    exit_time = record[0][4]  # exit time
+    tdiff = exit_time - entry_time
     fees = "test"
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=fees)
 
