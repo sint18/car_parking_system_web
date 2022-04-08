@@ -11,56 +11,72 @@ Car Parking System | Vehicle Exit
 <form action="" method="post">
     <div class="row">
         <div class="col">
-            <div class="mb-3">
-                <label for="v_id" class="form-label">Vehicle ID</label>
-                <input type="text" class="form-control" name="v_id" id="v_id" placeholder="" value="{{ data[0] }}"
-                    readonly>
-            </div>
-            <div class="mb-3">
-                <label for="reg_num" class="form-label">Registration No.</label>
-                <input type="text" class="form-control" name="reg_num" id="reg_num" placeholder="" value="{{ data[2] }}"
-                    readonly>
-            </div>
-            <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <input type="text" class="form-control" name="category" id="category" placeholder=""
-                    value="{{ data[1] }}" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="entry_time" class="form-label">Entry Time</label>
-                <input type="text" class="form-control" name="entry_time" id="entry_time" placeholder=""
-                    value="{{ data[3] }}" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="exit_time" class="form-label">Exit Time</label>
-                <input type="text" class="form-control" name="exit_time" id="exit_time" placeholder=""
-                    value="{{ data[4] }}" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="fees" class="form-label">Fees</label>
-                <input type="text" class="form-control" name="fees" id="fees" placeholder="" value="{{ fees }}"
-                    readonly>
-            </div>
-            <div class="mb-3">
-                <label for="hours_parked" class="form-label">Hours Parked</label>
-                <input type="text" class="form-control" name="hours_parked" id="hours_parked" placeholder=""
-                    value="{{ data[5] }}" readonly>
-            </div>
+            <p class="h5">Parking Info</p>
+            {% if data and fees: %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Vehicle ID</th>
+                        <td>{{ data[0] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Registration No.</th>
+                        <td>{{ data[2] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ data[1] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Entry Time</th>
+                        <td>{{ data[3] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Exit Time</th>
+                        <td>{{ data[4] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fees</th>
+                        <td>{{ fees }}</td>
+                    </tr>
+                    <tr>
+                        <th>Hours Parked</th>
+                        <td>{{ data[5] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
         </div>
         <div class="col">
-            <p class="h5">Remarks</p>
-            <div class="p-2 border" id="remark">
+            <p class="h5">Other Info</p>
+            <!-- <div class="p-2 border" id="remark">
                 <p>No remarks</p>
                 <p>Put fines</p>
                 <p>Membership status</p>
 
-            </div>
+            </div> -->
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Fine</th>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <th>Membership Status</th>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <th>Remark</th>
+                        <td>test</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <div class="row">
         <div class="col-3 d-grid">
-            <input type="submit" class="btn btn-primary" value="Add">
+            <input type="submit" class="btn btn-primary" value="Submit">
         </div>
         <div class="col-3 d-grid">
             <input type="reset" class="btn btn-warning" value="Reset">
