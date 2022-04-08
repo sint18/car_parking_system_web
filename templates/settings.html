@@ -8,7 +8,7 @@ Car Parking System | Settings
 <p class="h1">Settings</p>
 
 <div class="mb-3">
-    <form class="form-group mb-3">
+    <form class="form-group">
         <a href="/add-user" class="btn btn-primary">Add New User</a>
     </form>
     <table class="table" id="user_table">
@@ -34,7 +34,9 @@ Car Parking System | Settings
                         <!-- <button type="button" class="btn btn-secondary">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button> -->
                         <a href="/edit/user?u_id={{ row[0] }}" class="btn btn-secondary">Edit</a>
-                        <a href="/delete/user?u_id={{ row[0] }}" class="btn btn-danger">Delete</a>
+                        <a href="/delete/user?u_id={{ row[0] }}"
+                            onclick="return confirm('Are you sure you want to delete \'{{ row[2] }}\'?')"
+                            class="btn btn-danger">Delete</a>
                     </div>
                 </td>
             </tr>
@@ -45,6 +47,7 @@ Car Parking System | Settings
 </div>
 
 <script>
+
     $(document).ready(function () {
         $('#user_table').DataTable({
             "lengthChange": false
