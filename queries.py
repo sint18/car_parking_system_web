@@ -94,3 +94,25 @@ def get_categories():
     cursor.execute(query)
     records = cursor.fetchall()
     return records
+
+
+def get_category_by_id(id: int):
+    query = f"SELECT * FROM category WHERE `id` = {id}"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
+
+
+def insert_category(name: str, desc: str):
+    query = f"INSERT INTO `category` (`id`, `category_name`, `description`, `creationDate`) VALUES (NULL, '{name}', '{desc}', NOW())"
+    cursor.execute(query)
+
+
+def update_category(id: int, name: str, desc: str):
+    query = f"UPDATE `category` SET `category_name` = '{name}', `description` = '{desc}' WHERE `category`.`id` = {id}"
+    cursor.execute(query)
+
+
+def delete_category(id: int):
+    query = f"DELETE FROM `category` WHERE `category`.`id` = {id}"
+    cursor.execute(query)

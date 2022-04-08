@@ -1,0 +1,33 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Edit Category
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-secondary mb-3" onclick="history.back()"><img src="/static/icons/arrow-left-short.svg" alt=""
+        width="32" height="32">
+    Back</button>
+<p class="h1">Edit Category</p>
+<form action="/edit/category?c_id={{ data[0] }}" method="post">
+    {% if data: %}
+    <div class="mb-3">
+        <label for="category_name" class="form-label">Category Name</label>
+        <input type="text" class="form-control" name="category_name" id="category_name" placeholder=""
+            value="{{ data[1] }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="desc" class="form-label">Description</label>
+        <input type="text" class="form-control" name="desc" id="desc" placeholder="" value="{{ data[2] }}">
+    </div>
+    <div class="row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Update">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div>
+    {% endif %}
+
+</form>
+{% endblock %}

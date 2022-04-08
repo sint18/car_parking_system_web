@@ -1,5 +1,5 @@
-from crypt import methods
-from sre_parse import FLAGS
+
+from winreg import QueryInfoKey
 from flask import Flask, flash, redirect, request, session, url_for, render_template, jsonify
 import secrets
 import functions
@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
 
 
+# login & logout
 @app.route("/", methods=["GET", "POST"])
 def login():
 
@@ -30,6 +31,15 @@ def login():
     return render_template("login.html", error=error)
 
 
+@ app.route("/logout")
+def logout():
+    session.pop("user")
+    session.pop("u_id")
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+
+# dashboard
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -38,6 +48,7 @@ def dashboard():
     return render_template("dashboard.html")
 
 
+# settings/users
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
     if "user" not in session:
@@ -75,7 +86,13 @@ def delete(type):
 
         if u_id:
             queries.delete_user(int(u_id))
-    return redirect(url_for("settings"))
+        return redirect(url_for("settings"))
+
+    if type == "category":
+        c_id = request.args.get("c_id")
+        if c_id:
+            queries.delete_category(c_id)
+        return redirect(url_for("category"))
 
 
 @app.route("/edit/<type>", methods=["GET", "POST"])
@@ -83,7 +100,6 @@ def edit(type):
     if type == "user":
         error = None
         u_id = request.args.get('u_id')
-        data = []
         record = queries.get_user_by_id(u_id)
 
         if request.method == "POST":
@@ -104,6 +120,49 @@ def edit(type):
                     error = "Incorrect old password"
 
         return render_template("settings/edit_user.html", data=record[0], error=error)
+
+    if type == "category":
+        error = None
+        c_id = request.args.get("c_id")
+        record = queries.get_category_by_id(c_id)
+
+        if request.method == "POST":
+            cat_name = request.form["category_name"]
+            cat_desc = request.form["desc"]
+
+            queries.update_category(c_id, cat_name, cat_desc)
+            return redirect(url_for("category"))
+
+        return render_template("category/edit_category.html", data=record[0])
+
+# category
+
+
+@app.route("/categories")
+def category():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    records = queries.get_categories()
+    return render_template("category/category.html", data=records)
+
+
+@app.route("/add-category", methods=["GET", "POST"])
+def add_category():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    msg = None
+
+    if request.method == "POST":
+        cat_name = request.form["category_name"]
+        cat_desc = request.form["desc"]
+        if cat_name:
+            queries.insert_category(cat_name, cat_desc)
+            return redirect(url_for("category"))
+
+    return render_template("category/add_new_category.html", msg=msg)
+
+# vehicles
 
 
 @app.route("/vehicles")
@@ -142,14 +201,6 @@ def update_vehicle():
     tdiff = exit - entry
     fees = "test"
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=fees)
-
-
-@ app.route("/logout")
-def logout():
-    session.pop("user")
-    session.pop("u_id")
-    if "user" not in session:
-        return redirect(url_for("login"))
 
 
 if __name__ == "__main__":

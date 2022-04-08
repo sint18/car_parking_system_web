@@ -1,0 +1,59 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Car Parking System | Category List
+{% endblock %}
+
+{% block content%}
+<p class="h1">Category</p>
+
+<div class="mb-3">
+    <form class="form-group">
+        <a href="/add-category" class="btn btn-primary">Add New Category</a>
+    </form>
+    <table class="table" id="category_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Creation Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data: %}
+            {% for row in data: %}
+            <tr>
+                <td class="align-middle">{{ row[0] }}</td>
+                <td class="align-middle">{{ row[1] }}</td>
+                <td class="align-middle">{{ row[2] }}</td>
+                <td class="align-middle">{{ row[3] }}</td>
+                <td>
+                    <div class="form-group">
+                        <!-- <button type="button" class="btn btn-secondary">Edit</button>
+                        <button type="button" class="btn btn-danger">Delete</button> -->
+                        <a href="/edit/category?c_id={{ row[0] }}" class="btn btn-secondary">Edit</a>
+                        <a href="/delete/category?c_id={{ row[0] }}"
+                            onclick="return confirm('Are you sure you want to delete \'{{ row[1] }}\'?')"
+                            class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#category_table').DataTable({
+            "lengthChange": false
+        });
+    });
+</script>
+
+
+{% endblock%}
