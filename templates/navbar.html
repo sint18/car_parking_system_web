@@ -19,8 +19,8 @@
 <body>
     <div class="container my-3">
         <div class="row" style="height: 95vh;">
-            <div class="col col-sm-auto">
-                <p>{{ session["user"] }}</p>
+            <div class="col col-sm-auto d-flex flex-column">
+                <p class="h5 text-center mt-2">{{ session["user"] }}</p>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
@@ -44,21 +44,14 @@
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">Disabled</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li> -->
-                    <!-- <li class="nav-item floa-left">
-                        <form class="d-grid">
-                            <a class="btn btn-danger" href="/logout">Logout</a>
-                        </form>
-                    </li> -->
                 </ul>
                 <hr>
                 <div class="d-grid">
-                    <a href="" class="btn btn-danger">Logout</a>
+                    <a href="/logout" class="btn btn-danger">Logout</a>
                 </div>
 
             </div>
+
             <div class="col">
                 {% block content %}
                 {% endblock %}

@@ -48,8 +48,10 @@ Car Parking System | Vehicles
 <script>
     $(document).ready(function () {
         $('#vehicle_table').DataTable({
-            "lengthChange": false,
-            "order": [[3, 'desc']]
+            "order": [[3, 'desc']],
+            "scrollY": "70vh",
+            "scrollCollapse": true,
+            "paging": false
         });
     });
 </script>
