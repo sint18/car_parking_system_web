@@ -3,7 +3,7 @@ from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 import functions
 import queries
-
+import json
 
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
@@ -46,8 +46,9 @@ def dashboard():
 
     return render_template("dashboard.html")
 
-
 # settings/users
+
+
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
     if "user" not in session:

@@ -26,6 +26,13 @@ def login(username, password):
     record = cursor.fetchall()
     return record
 
+# dashboard
+
+
+def custom_query(query: str):
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return result
 
 # users
 
