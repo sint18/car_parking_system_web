@@ -1,5 +1,7 @@
 from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
+
+from numpy import var
 import functions
 import queries
 import variables
@@ -43,7 +45,13 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
 
-    return render_template("dashboard.html")
+    data = {
+        "parked_vehicles": f"{queries.count_parked_vehicles()}/{variables.PARKING_LIMIT}",
+        "categories": queries.count_categories(),
+        "history": queries.count_history(),
+        "over_parked": queries.count_over_parked(variables.TIME_LIMIT)
+    }
+    return render_template("dashboard.html", data=data)
 
 # settings/users
 

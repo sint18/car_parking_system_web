@@ -34,6 +34,34 @@ def custom_query(query: str):
     result = cursor.fetchall()
     return result
 
+
+def count_parked_vehicles():
+    query = "SELECT COUNT(*) FROM `vehicle_info` WHERE out_time IS NULL AND fees IS NULL"
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    return result
+
+
+def count_categories():
+    query = "SELECT COUNT(*) FROM category"
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    return result
+
+
+def count_history():
+    query = "SELECT COUNT(*) FROM vehicle_info WHERE out_time IS NOT NULL AND fees IS NOT NULL"
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    return result
+
+
+def count_over_parked(limit: str):
+    query = f"SELECT COUNT(id) FROM `vehicle_info` WHERE TIMEDIFF(NOW(), in_time) > TIME('{limit}') AND out_time IS NULL"
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    return result
+
 # users
 
 
@@ -73,6 +101,13 @@ def update_user(user_id: int, fullname: str, username: str, new_password=""):
     cursor.execute(query)
 
 # vehicles
+
+
+def get_vehicle_history():
+    query = "SELECT vehicle_info.id, vehicle_info.plate_number, category.category_name, vehicle_info.in_time, vehicle_info.out_time, vehicle_info.fees, vehicle_info.total_hours FROM `vehicle_info` INNER JOIN category ON vehicle_info.category_id = category.id WHERE vehicle_info.fees IS NOT NULL AND vehicle_info.out_time is NOT NULL ORDER BY `id` DESC"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
 
 
 def get_parked_vehicles():

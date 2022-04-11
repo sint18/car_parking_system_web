@@ -5,6 +5,12 @@
     transform: translateY(-50%);
 }
 
+#dashboard>div.col>div.container {
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+
 .full-screen-height {
     height: 100vh;
 }
