@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 import functions
 import queries
-import json
+import variables
 
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
@@ -197,9 +197,10 @@ def update_vehicle():
     record = queries.get_parked_vehicles_by_id(vehicle_id)
     entry_time = record[0][3]  # entry time
     exit_time = record[0][4]  # exit time
+    rate_1, rate_2 = variables.RATE_1, variables.RATE_2
     tdiff = exit_time - entry_time
     total_hr = tdiff.total_seconds()/3600
-    fees = functions.calculate_fees(total_hr, 500, 200)
+    fees = functions.calculate_fees(total_hr, rate_1, rate_2)
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees))
 
 
