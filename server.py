@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 
@@ -205,11 +206,26 @@ def update_vehicle():
     record = queries.get_parked_vehicles_by_id(vehicle_id)
     entry_time = record[0][3]  # entry time
     exit_time = record[0][4]  # exit time
+
     rate_1, rate_2 = variables.RATE_1, variables.RATE_2
+
     tdiff = exit_time - entry_time
+
+    t_limit = datetime.timedelta(hours=24)
     total_hr = tdiff.total_seconds()/3600
-    fees = functions.calculate_fees(total_hr, rate_1, rate_2)
-    return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees))
+    other = {
+        "remark": "",
+        "fine": 0,
+        "membership": ""
+    }
+    fees = fees = functions.calculate_fees(
+        total_hr, rate_1, rate_2)
+    if tdiff > t_limit:
+        other["remark"] = "Over Parked"
+        other["fine"] = functions.format_currency(variables.FINE)
+        fees = fees + variables.FINE
+
+    return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees), other=other)
 
 
 if __name__ == "__main__":

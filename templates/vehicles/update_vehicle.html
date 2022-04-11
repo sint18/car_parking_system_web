@@ -36,12 +36,12 @@ Car Parking System | Vehicle Exit
                         <td>{{ data[4] }}</td>
                     </tr>
                     <tr>
-                        <th>Fees</th>
-                        <td>{{ fees }}</td>
-                    </tr>
-                    <tr>
                         <th>Hours Parked</th>
                         <td>{{ data[5] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fees</th>
+                        <td style="font-size: 5ex;">{{ fees }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -59,15 +59,24 @@ Car Parking System | Vehicle Exit
                 <tbody>
                     <tr>
                         <th>Fine</th>
-                        <td>test</td>
+                        {% if other["fine"]: %}
+                        <td>{{ other["fine"] }}</td>
+                        {% else: %}
+                        <td>No fine</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <th>Membership Status</th>
-                        <td>test</td>
+                        <td>{{ other["membership"] }}</td>
                     </tr>
                     <tr>
                         <th>Remark</th>
-                        <td>test</td>
+                        {% if other["remark"]: %}
+                        <td class="" style="color: #BB2D3B;"><b>{{ other["remark"] }}</b></td>
+                        {% else: %}
+                        <td>No remark</td>
+                        {% endif %}
+
                     </tr>
                 </tbody>
             </table>
