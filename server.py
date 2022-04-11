@@ -1,4 +1,3 @@
-
 from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 import functions
@@ -199,8 +198,9 @@ def update_vehicle():
     entry_time = record[0][3]  # entry time
     exit_time = record[0][4]  # exit time
     tdiff = exit_time - entry_time
-    fees = "test"
-    return render_template("vehicles/update_vehicle.html", data=record[0], fees=fees)
+    total_hr = tdiff.total_seconds()/3600
+    fees = functions.calculate_fees(total_hr, 500, 200)
+    return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees))
 
 
 if __name__ == "__main__":
