@@ -1,21 +1,23 @@
 {% extends "navbar.html" %}
 
 {% block title %}
-Car Parking System | Parking History
+Car Parking System | View Membership
 {% endblock %}
 
 {% block content%}
-<p class="h1">Parking History</p>
+<p class="h1">All Members</p>
 
 <div class="mb-3">
-    <table class="table" id="vehicle_table">
+    <table class="table" id="member_table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Reg No.</th>
-                <th>Category</th>
-                <th>Entry Time</th>
-                <th>Exit Time</th>
+                <th>Membership Tier</th>
+                <th>Start Date</th>
+                <th>Valid Until</th>
+                <th>Subscription</th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,11 +30,13 @@ Car Parking System | Parking History
                 <td class="align-middle">{{ row[2] }}</td>
                 <td class="align-middle">{{ row[3] }}</td>
                 <td class="align-middle">{{ row[4] }}</td>
+                <td class="align-middle">{{ row[5] }}</td>
+                <td class="align-middle">{{ row[6] }}</td>
                 <td>
                     <div class="form-group">
                         <!-- <button type="button" class="btn btn-secondary">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button> -->
-                        <a href="vehicle-info?v_id={{ row[0] }}" class="btn btn-outline-info">View Information</a>
+                        <a href="delete/member?m_id={{ row[0] }}" class="btn btn-outline-danger">Revoke</a>
                     </div>
                 </td>
             </tr>
@@ -44,7 +48,7 @@ Car Parking System | Parking History
 
 <script>
     $(document).ready(function () {
-        $('#vehicle_table').DataTable({
+        $('#member_table').DataTable({
             "order": [[4, 'desc']],
             "scrollY": "70vh",
             "scrollCollapse": true,

@@ -189,7 +189,10 @@ def view_info():
 
     v_id = request.args.get("v_id")
     record = queries.get_vehicle_info_by_id(int(v_id))
-    return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]))
+    fine = ""
+    if record[7]:
+        fine = functions.format_currency(record[7])
+    return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]), fine=fine)
 
 
 @app.route("/vehicles")
@@ -252,6 +255,21 @@ def update_vehicle():
         return redirect(url_for("vehicles"))
 
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees), other=other)
+
+# members
+
+
+@app.route("/view-members")
+def view_members():
+
+    records = queries.get_members()
+    data = []
+    if records:
+        for row in records:
+            ddiff = row[4] - row[3]
+            data.append((row[0], row[1], row[2],
+                         row[3], row[4], f"{ddiff.days} days", row[5]))
+    return render_template("members/view_members.html", data=data)
 
 
 if __name__ == "__main__":

@@ -49,6 +49,26 @@ Car Parking System | Vehicle Information
         </div>
         <div class="col">
             <p class="h5">Other Info</p>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Fine</th>
+                        {% if fine: %}
+                        <td>{{ fine }}</td>
+                        {% else: %}
+                        <td>No Fine</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <th>Membership Status</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Remark</th>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

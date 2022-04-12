@@ -125,7 +125,7 @@ def get_parked_vehicles_by_id(v_id: int):
 
 
 def get_vehicle_info_by_id(v_id: int):
-    query = f"SELECT vehicle_info.id, vehicle_info.plate_number, category.category_name, vehicle_info.in_time, vehicle_info.out_time, vehicle_info.fees, vehicle_info.total_hours FROM `vehicle_info` INNER JOIN category ON vehicle_info.category_id = category.id WHERE vehicle_info.id = {v_id}"
+    query = f"SELECT vehicle_info.id, vehicle_info.plate_number, category.category_name, vehicle_info.in_time, vehicle_info.out_time, vehicle_info.fees, vehicle_info.total_hours, vehicle_info.fined FROM `vehicle_info` INNER JOIN category ON vehicle_info.category_id = category.id WHERE vehicle_info.id = {v_id}"
     cursor.execute(query)
     record = cursor.fetchone()
     return record
@@ -170,6 +170,15 @@ def update_category(c_id: int, name: str, desc: str):
 def delete_category(c_id: int):
     query = f"DELETE FROM `category` WHERE `category`.`id` = {c_id}"
     cursor.execute(query)
+
+
+# members
+
+def get_members():
+    query = "SELECT * FROM members"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
 
 
 print(get_vehicle_info_by_id(100))
