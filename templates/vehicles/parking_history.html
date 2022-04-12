@@ -1,0 +1,57 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Car Parking System | Parking History
+{% endblock %}
+
+{% block content%}
+<p class="h1">Manage Vehicles</p>
+
+<div class="mb-3">
+    <table class="table" id="vehicle_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Reg No.</th>
+                <th>Category</th>
+                <th>Entry Time</th>
+                <th>Parked Hours</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data: %}
+            {% for row in data: %}
+            <tr>
+                <td class="align-middle">{{ row[0] }}</td>
+                <td class="align-middle">{{ row[1] }}</td>
+                <td class="align-middle">{{ row[2] }}</td>
+                <td class="align-middle">{{ row[3] }}</td>
+                <td class="align-middle">{{ row[6] }}</td>
+                <td>
+                    <div class="form-group">
+                        <!-- <button type="button" class="btn btn-secondary">Edit</button>
+                        <button type="button" class="btn btn-danger">Delete</button> -->
+                        <a href="vehicle-info?v_id={{ row[0] }}" class="btn btn-outline-info">View Information</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#vehicle_table').DataTable({
+            "order": [[0, 'desc']],
+            "scrollY": "70vh",
+            "scrollCollapse": true,
+            "paging": false
+        });
+    });
+</script>
+
+
+{% endblock%}

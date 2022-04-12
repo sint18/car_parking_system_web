@@ -173,6 +173,25 @@ def add_category():
 # vehicles
 
 
+@app.route("/parking-history")
+def parking_history():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    records = queries.get_vehicle_history()
+    return render_template("vehicles/parking_history.html", data=records)
+
+
+@app.route("/vehicle-info")
+def view_info():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    v_id = request.args.get("v_id")
+    record = queries.get_vehicle_info_by_id(int(v_id))
+    return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]))
+
+
 @app.route("/vehicles")
 def vehicles():
     if "user" not in session:

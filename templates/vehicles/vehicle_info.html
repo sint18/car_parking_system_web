@@ -1,0 +1,65 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Vehicle Information
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-secondary mb-3" onclick="history.back()"><img class="white-svg"
+        src="/static/icons/arrow-left-short.svg" alt="" width="32" height="32">
+    Back</button>
+<p class="h1">Vehicle Information</p>
+<form action="" method="post">
+    <div class="row">
+        <div class="col">
+            <p class="h5">Parking Info</p>
+            {% if data: %}
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Vehicle ID</th>
+                        <td>{{ data[0] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Registration No.</th>
+                        <td>{{ data[1] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ data[2] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Entry Time</th>
+                        <td>{{ data[3] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Exit Time</th>
+                        <td>{{ data[4] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Hours Parked</th>
+                        <td>{{ data[6] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fees</th>
+                        <td>{{ fees }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        <div class="col">
+            <p class="h5">Other Info</p>
+        </div>
+    </div>
+
+    <!-- <div class="row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div> -->
+
+</form>
+{% endblock %}
