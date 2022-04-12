@@ -8,11 +8,12 @@ Car Parking System | Vehicle Exit
         src="/static/icons/arrow-left-short.svg" alt="" width="32" height="32">
     Back</button>
 <p class="h1">Vehicle Exit</p>
-<form action="" method="post">
+{% if data and fees: %}
+<form action="/update-vehicle?v_id={{ data[0] }}" method="post">
     <div class="row">
         <div class="col">
             <p class="h5">Parking Info</p>
-            {% if data and fees: %}
+
             <table class="table">
                 <tbody>
                     <tr>
@@ -45,7 +46,7 @@ Car Parking System | Vehicle Exit
                     </tr>
                 </tbody>
             </table>
-            {% endif %}
+
         </div>
         <div class="col">
             <p class="h5">Other Info</p>
@@ -93,4 +94,5 @@ Car Parking System | Vehicle Exit
     </div>
 
 </form>
+{% endif %}
 {% endblock %}

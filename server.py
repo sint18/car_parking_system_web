@@ -216,7 +216,7 @@ def vehicle_entry():
     return render_template("vehicles/vehicle_entry.html", data=categories, msg=msg)
 
 
-@app.route("/update-vehicle")
+@app.route("/update-vehicle", methods=["GET", "POST"])
 def update_vehicle():
     if "user" not in session:
         return redirect(url_for("login"))
@@ -237,12 +237,19 @@ def update_vehicle():
         "fine": 0,
         "membership": ""
     }
-    fees = fees = functions.calculate_fees(
+    fine = None
+    fees = functions.calculate_fees(
         total_hr, rate_1, rate_2)
     if tdiff > t_limit:
+        fine = variables.FINE
         other["remark"] = "Over Parked"
         other["fine"] = functions.format_currency(variables.FINE)
-        fees = fees + variables.FINE
+        fees = fees + fine
+
+    if request.method == "POST":
+        queries.update_vehicle(vehicle_id, exit_time,
+                               fees, tdiff, fine)
+        return redirect(url_for("vehicles"))
 
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees), other=other)
 

@@ -136,6 +136,11 @@ def insert_vehicles(cat_id: int, reg_num: str):
     cursor.execute(query)
 
 
+def update_vehicle(v_id: int, out_time, fees, total_hours, fine):
+    query = f"UPDATE `vehicle_info` SET `out_time` = '{out_time}', `fees` = '{fees}', `total_hours` = '{total_hours}', `fined` = '{fine}' WHERE `vehicle_info`.`id` = {v_id}"
+    cursor.execute(query)
+
+
 # category
 
 def get_categories():
