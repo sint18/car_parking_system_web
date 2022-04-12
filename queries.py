@@ -181,4 +181,21 @@ def get_members():
     return records
 
 
+def get_tiers():
+    query = "SELECT * FROM membership_tier"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
+
+
+def register_member(plate_no, tier, start_date, valid_until):
+    query = f"INSERT INTO `members` (`id`, `plate_number`, `type`, `start_date`, `valid_until`, `status`) VALUES (NULL, '{plate_no}', '{tier}', '{start_date}', '{valid_until}', 'active')"
+    cursor.execute(query)
+
+
+def revoke_membership(m_id: int):
+    query = f"UPDATE members SET status = 'inactive' WHERE id = {m_id}"
+    cursor.execute(query)
+
+
 print(get_vehicle_info_by_id(100))

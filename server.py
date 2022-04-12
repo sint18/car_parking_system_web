@@ -1,8 +1,6 @@
 import datetime
 from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
-
-from numpy import var
 import functions
 import queries
 import variables
@@ -270,6 +268,30 @@ def view_members():
             data.append((row[0], row[1], row[2],
                          row[3], row[4], f"{ddiff.days} days", row[5]))
     return render_template("members/view_members.html", data=data)
+
+
+@app.route("/register-member", methods=["GET", "POST"])
+def register_member():
+
+    msg = None
+
+    if request.method == "POST":
+        reg_no = request.form["reg_num"]
+        tier = request.form["tierSel"]
+        start_date = request.form["startDate"]
+        valid_until = request.form["validUntil"]
+
+        queries.register_member(reg_no, tier, start_date, valid_until)
+        msg = f"{reg_no} has been subscribed"
+    records = queries.get_tiers()
+    return render_template("members/register_member.html", data=records, msg=msg)
+
+
+@app.route("/revoke-membership")
+def revoke_membership():
+    m_id = request.args.get("m_id")
+    queries.revoke_membership(m_id)
+    return redirect(url_for("view_members"))
 
 
 if __name__ == "__main__":

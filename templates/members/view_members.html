@@ -6,7 +6,7 @@ Car Parking System | View Membership
 
 {% block content%}
 <p class="h1">All Members</p>
-
+<a href="/register-member" class="btn btn-primary">Register New Member</a>
 <div class="mb-3">
     <table class="table" id="member_table">
         <thead>
@@ -31,12 +31,22 @@ Car Parking System | View Membership
                 <td class="align-middle">{{ row[3] }}</td>
                 <td class="align-middle">{{ row[4] }}</td>
                 <td class="align-middle">{{ row[5] }}</td>
-                <td class="align-middle">{{ row[6] }}</td>
+                {% if row[6] == "active": %}
+                <td class="align-middle table-success">{{ row[6] }}</td>
+                {% else: %}
+                <td class="align-middle table-danger">{{ row[6] }}</td>
+                {% endif %}
                 <td>
                     <div class="form-group">
                         <!-- <button type="button" class="btn btn-secondary">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button> -->
-                        <a href="delete/member?m_id={{ row[0] }}" class="btn btn-outline-danger">Revoke</a>
+                        {% if row[6] == "active": %}
+                        <a href="/revoke-membership?m_id={{ row[0] }}"
+                            onclick="return confirm('Revoke membership for {{ row[1] }}');"
+                            class="btn btn-outline-danger">Revoke</a>
+                        {% else: %}
+                        <a href="" class="btn btn-outline-secondary disabled">inactive</a>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
