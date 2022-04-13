@@ -1,5 +1,5 @@
+
 import datetime
-from tracemalloc import start
 from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 import functions
@@ -199,8 +199,9 @@ def vehicles():
     if "user" not in session:
         return redirect(url_for("login"))
 
-    records = queries.get_parked_vehicles()
-    return render_template("vehicles/vehicles.html", data=records)
+    vehicle_records = queries.get_parked_vehicles()
+    category_records = queries.get_categories()
+    return render_template("vehicles/vehicles.html", vehicle_data=vehicle_records, category_data=category_records)
 
 
 @app.route("/vehicle-entry", methods=["GET", "POST"])
@@ -215,7 +216,7 @@ def vehicle_entry():
         if cat_id != "" and reg_num != "":
             queries.insert_vehicles(cat_id, reg_num)
             msg = f"New vehicle added with the reg no. {reg_num}"
-    return render_template("vehicles/vehicle_entry.html", data=categories, msg=msg)
+    return redirect(url_for("vehicles", msg=msg))
 
 
 @app.route("/update-vehicle", methods=["GET", "POST"])
@@ -237,11 +238,19 @@ def update_vehicle():
     other = {
         "remark": "",
         "fine": 0,
-        "membership": ""
+        "membership": []
     }
     fine = None
     fees = functions.calculate_fees(
         total_hr, rate_1, rate_2)
+    member_info = queries.get_member_info_by_id(record[0][2])
+    if member_info:
+        member_status = member_info[2]
+        if member_status == "active":
+            other["membership"].extend(
+                ["Active", member_info[4], member_info[3], member_info[6], member_info[7]])
+            discount = member_info[3] / 100
+            fees = fees * discount
     if tdiff > t_limit:
         fine = variables.FINE
         other["remark"] = "Over Parked"
@@ -250,7 +259,7 @@ def update_vehicle():
 
     if request.method == "POST":
         queries.update_vehicle(vehicle_id, exit_time,
-                               fees, tdiff, fine)
+                               int(fees), tdiff, fine)
         return redirect(url_for("vehicles"))
 
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees), other=other)
@@ -320,10 +329,11 @@ def register_member():
     # return render_template("members/register_member.html", data=records, msg=msg)
 
 
-@app.route("/revoke-membership")
-def revoke_membership():
-    m_id = request.args.get("m_id")
-    queries.revoke_membership(m_id)
+@app.route("/terminate-membership", methods=["GET", "POST"])
+def terminate_membership():
+    if request.method == "POST":
+        ms_id = request.form["selectMembershipId"]
+        queries.revoke_membership(ms_id)
     return redirect(url_for("view_members"))
 
 

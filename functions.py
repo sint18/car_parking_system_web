@@ -21,7 +21,7 @@ def calculate_fees(hours: float, rate1: int, rate2: int):
 def format_currency(currency: int):
 
     try:
-        res = "{:,} MMK".format(currency)
+        res = "{:,} MMK".format(int(currency))
         return res
     except TypeError:
         return 0

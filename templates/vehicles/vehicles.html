@@ -7,42 +7,69 @@ Car Parking System | Vehicles
 {% block content%}
 <p class="h1">Manage Vehicles</p>
 
-<div class="mb-3">
-    <form class="form-group">
-        <a href="/vehicle-entry" class="btn btn-primary">Vehicle Entry</a>
-    </form>
-    <table class="table" id="vehicle_table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Reg No.</th>
-                <th>Category</th>
-                <th>Entry Time</th>
-                <th>Parked Hours</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if data: %}
-            {% for row in data: %}
-            <tr>
-                <td class="align-middle">{{ row[0] }}</td>
-                <td class="align-middle">{{ row[2] }}</td>
-                <td class="align-middle">{{ row[1] }}</td>
-                <td class="align-middle">{{ row[3] }}</td>
-                <td class="align-middle">{{ row[4] }}</td>
-                <td>
-                    <div class="form-group">
-                        <!-- <button type="button" class="btn btn-secondary">Edit</button>
-                        <button type="button" class="btn btn-danger">Delete</button> -->
-                        <a href="update-vehicle?v_id={{ row[0] }}" class="btn btn-outline-danger">Take Action</a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+<div class="row mb-3">
+    <div class="col">
+        <table class="table" id="vehicle_table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Reg No.</th>
+                    <th>Category</th>
+                    <th>Entry Time</th>
+                    <th>Parked Hours</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if vehicle_data: %}
+                {% for row in vehicle_data: %}
+                <tr>
+                    <td class="align-middle">{{ row[0] }}</td>
+                    <td class="align-middle">{{ row[2] }}</td>
+                    <td class="align-middle">{{ row[1] }}</td>
+                    <td class="align-middle">{{ row[3] }}</td>
+                    <td class="align-middle">{{ row[4] }}</td>
+                    <td>
+                        <div class="form-group">
+                            <!-- <button type="button" class="btn btn-secondary">Edit</button>
+                            <button type="button" class="btn btn-danger">Delete</button> -->
+                            <a href="update-vehicle?v_id={{ row[0] }}" class="btn btn-outline-danger">Take Action</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4">
+        <p class="h4">Vehicle Entry</p>
+        <form action="/vehicle-entry" method="post">
+            <div class="mb-3">
+                <label for="reg_num" class="form-label">Registration Number</label>
+                <input type="text" class="form-control" name="reg_num" id="reg_num" placeholder="" required>
+            </div>
+            <div class="mb-3">
+                <label for="categorySel" class="form-label">Select Category</label>
+                <select class="form-select" id="categorySel" name="cat_id">
+                    {% if category_data: %}
+                    {% for row in category_data: %}
+                    <option value="{{ row[0] }}">{{ row[1] }}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-3 d-grid">
+                    <input type="submit" class="btn btn-primary" value="Add">
+                </div>
+                <div class="col-3 d-grid">
+                    <input type="reset" class="btn btn-warning" value="Reset">
+                </div>
+            </div>
+
+        </form>
+    </div>
 </div>
 
 <script>

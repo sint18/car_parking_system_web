@@ -17,7 +17,7 @@ Car Parking System | Member Info
             <table class="table">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>ID</th>
                         <th>Tier</th>
                         <th>Start Date</th>
                         <th>Valid Until</th>
@@ -28,7 +28,7 @@ Car Parking System | Member Info
                 <tbody>
                     {% for row in data: %}
                     <tr>
-                        <td></td>
+                        <td>{{ row[0] }}</td>
                         <td>{{ row[6] }}</td>
                         <td>{{ row[3] }}</td>
                         <td>{{ row[4] }}</td>
@@ -41,7 +41,29 @@ Car Parking System | Member Info
 
         </form>
     </div>
-    <div class="col"></div>
+    <div class="col">
+        <p class="h4">Terminate Membership</p>
+        <form action="/terminate-membership" method="post">
+            <div class="mb-3">
+                <label for="startDate" class="form-label">Select ID</label>
+                <select name="selectMembershipId" class="form-select" id="">
+                    {% for row in data: %}
+                    <option value="{{ row[0] }}">{{ row[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-3 d-grid">
+                    <input type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to terminate membership?')" value="Terminate">
+                </div>
+                <div class="col-3 d-grid">
+                    <input type="reset" class="btn btn-warning" value="Reset">
+                </div>
+            </div>
+
+        </form>
+    </div>
 
 </div>
 

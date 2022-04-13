@@ -40,6 +40,12 @@ Car Parking System | Vehicle Exit
                         <th>Hours Parked</th>
                         <td>{{ data[5] }}</td>
                     </tr>
+                    {% if other["membership"]: %}
+                    <tr>
+                        <th>Discount</th>
+                        <td>{{ other["membership"][2] }}% Applied</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th>Fees</th>
                         <td style="font-size: 5ex;">{{ fees }}</td>
@@ -68,8 +74,27 @@ Car Parking System | Vehicle Exit
                     </tr>
                     <tr>
                         <th>Membership Status</th>
-                        <td>{{ other["membership"] }}</td>
+                        {% if other["membership"]: %}
+                        <td class="table-success">{{ other["membership"][0] }}</td>
+                        {% else: %}
+                        <td class="table-danger">Inactive</td>
+                        {% endif %}
                     </tr>
+                    {% if other["membership"]: %}
+                    <tr>
+                        <th>Membership Tier</th>
+                        <td class="">{{ other["membership"][1] }}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Start Date</th>
+                        <td>{{ other["membership"][3] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Valid Until</th>
+                        <td>{{ other["membership"][4] }}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th>Remark</th>
                         {% if other["remark"]: %}

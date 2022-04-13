@@ -174,6 +174,19 @@ def delete_category(c_id: int):
 
 # members
 
+def get_member_info_by_id(plate_number):
+    query = f"""SELECT members.member_id, members.plate_number, members.status,
+    membership_tier.discount, membership_tier.tier, membership_tier.cost, 
+    membership.start_date, membership.valid_until FROM membership 
+    INNER JOIN members ON members.member_id = membership.member_id 
+    INNER JOIN membership_tier ON membership.tier_id = membership_tier.id 
+    WHERE members.plate_number = '{plate_number}' 
+    ORDER BY membership.start_date DESC LIMIT 1"""
+    cursor.execute(query)
+    record = cursor.fetchone()
+    return record
+
+
 def get_members():
     query = "SELECT * FROM members"
     cursor.execute(query)
@@ -228,7 +241,7 @@ def register_member(reg_no, tier_id, start_date, valid_until):
 
 
 def revoke_membership(m_id: int):
-    query = f"UPDATE members SET status = 'inactive' WHERE id = {m_id}"
+    query = f"UPDATE `membership` SET `valid_until` = NOW() WHERE `membership`.`id` = {m_id}"
     cursor.execute(query)
 
 
