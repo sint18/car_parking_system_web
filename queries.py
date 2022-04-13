@@ -188,9 +188,43 @@ def get_tiers():
     return records
 
 
-def register_member(plate_no, tier, start_date, valid_until):
-    query = f"INSERT INTO `members` (`id`, `plate_number`, `type`, `start_date`, `valid_until`, `status`) VALUES (NULL, '{plate_no}', '{tier}', '{start_date}', '{valid_until}', 'active')"
+def extend_member(member_id, tier_id, start_date, valid_until):
+    query = f"INSERT INTO `membership` (`id`, `member_id`, `tier_id`, `start_date`, `valid_until`) VALUES (NULL, '{member_id}', '{tier_id}', '{start_date}', '{valid_until}')"
     cursor.execute(query)
+
+
+def update_status(member_id):
+    query = f"SELECT * FROM `membership` WHERE member_id = {member_id}"
+    cursor.execute(query)
+    records = cursor.fetchall()
+
+    if not records or not is_valid(member_id):
+        query1 = f"UPDATE `members` SET `status` = 'inactive' WHERE `members`.`member_id` = {member_id}"
+        cursor.execute(query1)
+    elif is_valid(member_id):
+        query1 = f"UPDATE `members` SET `status` = 'active' WHERE `members`.`member_id` = {member_id}"
+        cursor.execute(query1)
+
+
+def is_valid(member_id):
+    query = f"SELECT * FROM `membership` WHERE member_id = {member_id} AND start_date <= NOW() AND valid_until >= NOW()"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    if records:
+        return True
+    return False
+
+
+def register_member(reg_no, tier_id, start_date, valid_until):
+    query1 = f"INSERT INTO `members` (`member_id`, `plate_number`, `status`) VALUES (NULL, '{reg_no}', 'active')"
+    cursor.execute(query1)
+
+    query2 = f"SELECT * FROM `members` WHERE plate_number = '{reg_no}'"
+    cursor.execute(query2)
+    member_id = cursor.fetchone()[0]
+
+    query3 = f"INSERT INTO `membership` (`id`, `member_id`, `tier_id`, `start_date`, `valid_until`) VALUES (NULL, '{member_id}', '{tier_id}', '{start_date}', '{valid_until}')"
+    cursor.execute(query3)
 
 
 def revoke_membership(m_id: int):
@@ -198,4 +232,8 @@ def revoke_membership(m_id: int):
     cursor.execute(query)
 
 
-print(get_vehicle_info_by_id(100))
+def get_member_info(member_id: int):
+    query = f"SELECT * FROM membership INNER JOIN membership_tier ON membership_tier.id = membership.tier_id WHERE member_id = {member_id}"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records

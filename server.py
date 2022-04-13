@@ -1,4 +1,5 @@
 import datetime
+from tracemalloc import start
 from flask import Flask, redirect, request, session, url_for, render_template
 import secrets
 import functions
@@ -260,31 +261,63 @@ def update_vehicle():
 @app.route("/view-members")
 def view_members():
 
-    records = queries.get_members()
+    records_members = queries.get_members()
+    tier_records = queries.get_tiers()
+
+    member_list = []
+    member_data = []
+    if records_members:
+        for row in records_members:
+            member_data.append((row[0], row[1], row[2]))
+            member_list.append(row[0])
+
+    for i in member_list:
+        queries.update_status(i)
+    return render_template("members/view_members.html", member_data=member_data, tier_data=tier_records)
+
+
+@app.route("/member-info")
+def view_member_info():
+    msg = None
+    m_id = request.args.get("m_id")
+    records = queries.get_member_info(m_id)
     data = []
     if records:
         for row in records:
+            new_list = list(row)
             ddiff = row[4] - row[3]
-            data.append((row[0], row[1], row[2],
-                         row[3], row[4], f"{ddiff.days} days", row[5]))
-    return render_template("members/view_members.html", data=data)
+            cost = functions.format_currency(row[7])
+            new_list.extend([ddiff, cost])
+            data.append(tuple(new_list))
+
+    return render_template("members/member_info.html", data=data, msg=msg)
 
 
 @app.route("/register-member", methods=["GET", "POST"])
 def register_member():
 
-    msg = None
-
     if request.method == "POST":
         reg_no = request.form["reg_num"]
-        tier = request.form["tierSel"]
+        tier_id = request.form["tierSel"]
         start_date = request.form["startDate"]
         valid_until = request.form["validUntil"]
 
-        queries.register_member(reg_no, tier, start_date, valid_until)
-        msg = f"{reg_no} has been subscribed"
-    records = queries.get_tiers()
-    return render_template("members/register_member.html", data=records, msg=msg)
+        member_records = queries.get_members()
+        member_dict = {}
+        for row in member_records:
+            member_dict[row[1]] = row[0]
+
+        if reg_no in member_dict.keys():
+            queries.extend_member(
+                member_dict[reg_no], tier_id, start_date, valid_until)
+        else:
+            queries.register_member(reg_no, tier_id, start_date, valid_until)
+
+            # queries.register_member(reg_no, tier, start_date, valid_until)
+
+    return redirect(url_for("view_members"))
+    # records = queries.get_tiers()
+    # return render_template("members/register_member.html", data=records, msg=msg)
 
 
 @app.route("/revoke-membership")

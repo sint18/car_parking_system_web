@@ -1,0 +1,48 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Member Info
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-secondary mb-3" onclick="window.location.href='/view-members'"><img class="white-svg"
+        src="/static/icons/arrow-left-short.svg" alt="" width="32" height="32">
+    Back</button>
+<p class="h1">Membership Information for</p>
+<div class="row">
+    <div class="col">
+        <form action="/register-member" method="post">
+            {% if msg: %}
+            <div class="alert alert-success">{{ msg }}</div>
+            {% endif %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tier</th>
+                        <th>Start Date</th>
+                        <th>Valid Until</th>
+                        <th>Timeframe</th>
+                        <th>Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data: %}
+                    <tr>
+                        <td></td>
+                        <td>{{ row[6] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+                        <td>{{ row[9].days }} days</td>
+                        <td>{{ row[10] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+    <div class="col"></div>
+
+</div>
+
+{% endblock %}
