@@ -1,0 +1,101 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Car Parking System | View Tiers
+{% endblock %}
+
+{% block content%}
+<p class="h1">Membership Tiers</p>
+<div class="row mb-3">
+    <div class="col">
+        <table class="table" id="member_table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tier Name</th>
+                    <th>Discount</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if tier_data: %}
+                {% for row in tier_data: %}
+                <tr>
+                    <td class="align-middle">{{ row[0] }}</td>
+                    <td class="align-middle">{{ row[1] }}</td>
+                    <td class="align-middle">{{ row[3] }}%</td>
+                    <td class="align-middle">{{ row[2] }}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col">
+        <p class="h4">Edit Tier</p>
+        <div class="mb-3">
+            <label for="selectTierId" class="form-label">Select ID</label>
+            <select class="form-select" id="selectTierId" name="selectTierId">
+                <option value="">ID</option>
+                {% if tier_data: %}
+                {% for row in tier_data: %}
+                <option value="{{ row[0] }}">{{ row[0] }}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+        <form action="" method="post">
+            <div class="mb-3">
+                <label for="tierName" class="form-label">Name</label>
+                <input type="text" class="form-control" name="tierName" id="tierName" placeholder="" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="discount" class="form-label">Discount</label>
+                <input type="text" class="form-control" name="discount" id="discount" placeholder="" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" class="form-control" name="price" id="price" placeholder="" required>
+            </div>
+            <div class="row">
+                <div class="col-3 d-grid">
+                    <input type="submit" class="btn btn-primary" value="Update">
+                </div>
+                <!-- <div class="col-3 d-grid">
+                    <input type="reset" class="btn btn-warning" value="Reset">
+                </div> -->
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#member_table').DataTable({
+            "scrollY": "70vh",
+            "scrollCollapse": true,
+            "paging": false
+        });
+
+        var selectTierId = document.getElementById("selectTierId")
+        var tierName = document.getElementById("tierName")
+        var discount = document.getElementById("discount")
+        var price = document.getElementById("price")
+        selectTierId.onchange = function () {
+            if (this.value != "") {
+                $.get(`/get-tiers/${this.value}`, function (data) {
+                    tierName.value = data[1]
+                    discount.value = data[3]
+                    price.value = data[2]
+                })
+            }
+
+        }
+
+    });
+</script>
+
+
+{% endblock%}

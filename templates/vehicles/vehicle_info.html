@@ -12,7 +12,7 @@ Car Parking System | Vehicle Information
     <div class="row">
         <div class="col">
             <p class="h5">Parking Info</p>
-            {% if data: %}
+
             <table class="table">
                 <tbody>
                     <tr>
@@ -21,11 +21,11 @@ Car Parking System | Vehicle Information
                     </tr>
                     <tr>
                         <th>Registration No.</th>
-                        <td>{{ data[1] }}</td>
+                        <td>{{ data[2] }}</td>
                     </tr>
                     <tr>
                         <th>Category</th>
-                        <td>{{ data[2] }}</td>
+                        <td>{{ data[1] }}</td>
                     </tr>
                     <tr>
                         <th>Entry Time</th>
@@ -39,13 +39,19 @@ Car Parking System | Vehicle Information
                         <th>Hours Parked</th>
                         <td>{{ data[6] }}</td>
                     </tr>
+                    {% if other["membership"]: %}
+                    <tr>
+                        <th>Discount</th>
+                        <td>{{ other["membership"][2] }}% Applied</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th>Fees</th>
-                        <td>{{ fees }}</td>
+                        <td style="font-size: 5ex;">{{ fees }}</td>
                     </tr>
                 </tbody>
             </table>
-            {% endif %}
+
         </div>
         <div class="col">
             <p class="h5">Other Info</p>
@@ -53,19 +59,43 @@ Car Parking System | Vehicle Information
                 <tbody>
                     <tr>
                         <th>Fine</th>
-                        {% if fine: %}
-                        <td>{{ fine }}</td>
+                        {% if other["fine"]: %}
+                        <td>{{ other["fine"] }}</td>
                         {% else: %}
-                        <td>No Fine</td>
+                        <td>No fine</td>
                         {% endif %}
                     </tr>
                     <tr>
                         <th>Membership Status</th>
-                        <td></td>
+                        {% if other["membership"]: %}
+                        <td class="table-success">{{ other["membership"][0] }}</td>
+                        {% else: %}
+                        <td class="table-danger">Inactive</td>
+                        {% endif %}
+                    </tr>
+                    {% if other["membership"]: %}
+                    <tr>
+                        <th>Membership Tier</th>
+                        <td class="">{{ other["membership"][1] }}</td>
+
                     </tr>
                     <tr>
+                        <th>Start Date</th>
+                        <td>{{ other["membership"][3] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Valid Until</th>
+                        <td>{{ other["membership"][4] }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
                         <th>Remark</th>
-                        <td></td>
+                        {% if other["remark"]: %}
+                        <td class="" style="color: #BB2D3B;"><b>{{ other["remark"] }}</b></td>
+                        {% else: %}
+                        <td>No remark</td>
+                        {% endif %}
+
                     </tr>
                 </tbody>
             </table>

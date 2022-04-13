@@ -1,6 +1,6 @@
 
 import datetime
-from flask import Flask, redirect, request, session, url_for, render_template
+from flask import Flask, redirect, request, session, url_for, render_template, jsonify
 import secrets
 import functions
 import queries
@@ -186,12 +186,22 @@ def view_info():
     if "user" not in session:
         return redirect(url_for("login"))
 
+    other = {
+        "remark": "",
+        "fine": 0,
+        "membership": []
+    }
     v_id = request.args.get("v_id")
     record = queries.get_vehicle_info_by_id(int(v_id))
-    fine = ""
+    member_info = queries.get_member_info_by_id(record[1])
+    if member_info:
+        member_status = member_info[2]
+        if member_status == "active":
+            other["membership"].extend(
+                ["Active", member_info[4], member_info[3], member_info[6], member_info[7]])
     if record[7]:
-        fine = functions.format_currency(record[7])
-    return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]), fine=fine)
+        other["fine"] = functions.format_currency(record[7])
+    return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]), other=other)
 
 
 @app.route("/vehicles")
@@ -250,7 +260,7 @@ def update_vehicle():
             other["membership"].extend(
                 ["Active", member_info[4], member_info[3], member_info[6], member_info[7]])
             discount = member_info[3] / 100
-            fees = fees * discount
+            fees = fees - (fees * discount)
     if tdiff > t_limit:
         fine = variables.FINE
         other["remark"] = "Over Parked"
@@ -335,6 +345,24 @@ def terminate_membership():
         ms_id = request.form["selectMembershipId"]
         queries.revoke_membership(ms_id)
     return redirect(url_for("view_members"))
+
+
+@app.route("/view-tiers")
+def view_tiers():
+    tier_records = queries.get_tiers()
+    tier_data = []
+    for row in tier_records:
+        data = list(row)
+        data[2] = functions.format_currency(row[2])
+        tier_data.append(data)
+    return render_template("members/view_tiers.html", tier_data=tier_data)
+
+
+@app.route("/get-tiers/<t_id>")
+def get_tiers(t_id):
+    tier_record = queries.get_tier_by_id(t_id)
+    print(tier_record)
+    return jsonify(tier_record)
 
 
 if __name__ == "__main__":

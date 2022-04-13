@@ -201,6 +201,13 @@ def get_tiers():
     return records
 
 
+def get_tier_by_id(t_id: int):
+    query = f"SELECT * FROM membership_tier WHERE id = {t_id}"
+    cursor.execute(query)
+    record = cursor.fetchone()
+    return record
+
+
 def extend_member(member_id, tier_id, start_date, valid_until):
     query = f"INSERT INTO `membership` (`id`, `member_id`, `tier_id`, `start_date`, `valid_until`) VALUES (NULL, '{member_id}', '{tier_id}', '{start_date}', '{valid_until}')"
     cursor.execute(query)
