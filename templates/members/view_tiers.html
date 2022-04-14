@@ -6,6 +6,7 @@ Car Parking System | View Tiers
 
 {% block content%}
 <p class="h1">Membership Tiers</p>
+<button class="btn btn-secondary mb-3" onclick=""><i class="bi bi-plus"></i> Add</button>
 <div class="row mb-3">
     <div class="col">
         <table class="table" id="member_table">
@@ -15,6 +16,7 @@ Car Parking System | View Tiers
                     <th>Tier Name</th>
                     <th>Discount</th>
                     <th>Price</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -25,24 +27,21 @@ Car Parking System | View Tiers
                     <td class="align-middle">{{ row[1] }}</td>
                     <td class="align-middle">{{ row[3] }}%</td>
                     <td class="align-middle">{{ row[2] }}</td>
+                    <td>
+                        <a href="" class="btn btn-secondary"><i class="bi bi-pencil-square"></i></a>
+                        <a href="" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+                    </td>
                 </tr>
                 {% endfor %}
                 {% endif %}
             </tbody>
         </table>
     </div>
-    <div class="col">
+    <div class="col" hidden>
         <p class="h4">Edit Tier</p>
         <div class="mb-3">
-            <label for="selectTierId" class="form-label">Select ID</label>
-            <select class="form-select" id="selectTierId" name="selectTierId">
-                <option value="">ID</option>
-                {% if tier_data: %}
-                {% for row in tier_data: %}
-                <option value="{{ row[0] }}">{{ row[0] }}</option>
-                {% endfor %}
-                {% endif %}
-            </select>
+            <label for="tierId" class="form-label">ID</label>
+            <input type="text" class="form-control" name="tierId" id="tierId" readonly>
         </div>
         <form action="" method="post">
             <div class="mb-3">

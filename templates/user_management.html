@@ -1,15 +1,15 @@
 {% extends "navbar.html" %}
 
 {% block title %}
-Car Parking System | Settings
+Car Parking System | Admin Management
 {% endblock %}
 
 {% block content%}
-<p class="h1">Settings</p>
+<p class="h1">Admin Management</p>
 
 <div class="mb-3">
     <form class="form-group">
-        <a href="/add-user" class="btn btn-primary">Add New User</a>
+        <a href="/add-user" class="btn btn-primary"><i class="bi bi-plus"></i>Add New User</a>
     </form>
     <table class="table" id="user_table">
         <thead>
@@ -18,6 +18,7 @@ Car Parking System | Settings
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Creation Date</th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,15 +29,26 @@ Car Parking System | Settings
                 <td class="align-middle">{{ row[0] }}</td>
                 <td class="align-middle">{{ row[1] }}</td>
                 <td class="align-middle">{{ row[2] }}</td>
-                <td class="align-middle">{{ row[4] }}</td>
+                <td class="align-middle">{{ row[5] }}</td>
+                <td class="{{ 'table-success' if row[4] == 'active' else 'table-danger' }}">
+                    <select name="statusSel" class="form-select" id="" user_id="{{ row[0] }}">
+                        <option value="active" {{ 'selected' if row[4]=='active' else '' }}>Active</option>
+                        <option value="inactive" {{ 'selected' if row[4]=='inactive' else '' }}>Inactive</option>
+                    </select>
+                </td>
                 <td>
                     <div class="form-group">
                         <!-- <button type="button" class="btn btn-secondary">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button> -->
-                        <a href="/edit/user?u_id={{ row[0] }}" class="btn btn-secondary">Edit</a>
+                        <a href="/edit/user?u_id={{ row[0] }}" class="btn btn-secondary">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
                         <a href="/delete/user?u_id={{ row[0] }}"
                             onclick="return confirm('Are you sure you want to delete \'{{ row[2] }}\'?')"
-                            class="btn btn-danger">Delete</a>
+                            class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
                     </div>
                 </td>
             </tr>
@@ -54,7 +66,20 @@ Car Parking System | Settings
             "scrollCollapse": true,
             "paging": false
         });
-    });
+
+        var statusSels = document.getElementsByName('statusSel')
+        statusSels.forEach(element => {
+            element.onchange = function () {
+                $.post("/user-management", {
+                    formUserId: this.getAttribute('user_id'),
+                    formStatus: this.value
+                }, function () {
+                    location.reload()
+                })
+            }
+
+        })
+    })
 </script>
 
 

@@ -20,9 +20,11 @@ def login():
         password = functions.get_hash(request.form["password"])
         record = queries.login(username, password)
         if record:
-            for row in record:
-                session["u_id"] = row[0]
-                session["user"] = row[2]
+            if record[4] == "active":
+                session["u_id"] = record[0]
+                session["user"] = record[2]
+            else:
+                error = "Account is deactivated"
         else:
             error = "Invalid credentials, try again"
 
@@ -53,19 +55,22 @@ def dashboard():
     }
     return render_template("dashboard.html", data=data)
 
-# settings/users
+# user_management/users
 
 
-@app.route("/settings", methods=["GET", "POST"])
-def settings():
+@app.route("/user-management", methods=["GET", "POST"])
+def user_management():
     if "user" not in session:
         return redirect(url_for("login"))
-
+    if request.method == "POST":
+        u_id = request.form["formUserId"]
+        status = request.form["formStatus"]
+        queries.update_user_status(u_id, status)
     data = []
     records = queries.get_user_list()
     if records:
         data = records
-    return render_template("settings.html", data=data)
+    return render_template("user_management.html", data=data)
 
 
 @app.route("/add-user", methods=["GET", "POST"])
@@ -81,9 +86,9 @@ def add_user():
                 queries.insert_user(fullname, username,
                                     functions.get_hash(password))
 
-                return redirect(url_for("settings"))
+                return redirect(url_for("user_management"))
 
-    return render_template("settings/add_new_user.html")
+    return render_template("user_management/add_new_user.html")
 
 
 @app.route("/delete/<ltype>", methods=["GET", "POST"])
@@ -93,7 +98,7 @@ def delete(ltype):
 
         if u_id:
             queries.delete_user(int(u_id))
-        return redirect(url_for("settings"))
+        return redirect(url_for("user_management"))
 
     if ltype == "category":
         c_id = request.args.get("c_id")
@@ -117,16 +122,16 @@ def edit(ltype):
 
             if not new_pass and not old_pass and fullname and username:
                 queries.update_user(u_id, fullname, username)
-                return redirect(url_for("settings"))
+                return redirect(url_for("user_management"))
             elif new_pass and old_pass and fullname and username:
                 if functions.get_hash(old_pass) == record[0][3]:
                     queries.update_user(
                         u_id, fullname, username, functions.get_hash(new_pass))
-                    return redirect(url_for("settings"))
+                    return redirect(url_for("user_management"))
                 else:
                     error = "Incorrect old password"
 
-        return render_template("settings/edit_user.html", data=record[0], error=error)
+        return render_template("user_management/edit_user.html", data=record[0], error=error)
 
     if ltype == "category":
         error = None
@@ -219,7 +224,6 @@ def vehicle_entry():
     if "user" not in session:
         return redirect(url_for("login"))
     msg = None
-    categories = queries.get_categories()
     if request.method == "POST":
         cat_id = request.form["cat_id"]
         reg_num = request.form["reg_num"]

@@ -23,7 +23,7 @@ def login(username, password):
 
     query = f"SELECT * FROM `admin` WHERE username='{username}' AND password='{password}'"
     cursor.execute(query)
-    record = cursor.fetchall()
+    record = cursor.fetchone()
     return record
 
 # dashboard
@@ -99,6 +99,12 @@ def update_user(user_id: int, fullname: str, username: str, new_password=""):
         query = f"UPDATE `admin` SET `fullname` = '{fullname}', `username` = '{username}' WHERE `admin`.`id` = {user_id}"
 
     cursor.execute(query)
+
+
+def update_user_status(user_id: int, status: str):
+    query = f"UPDATE `admin` SET `status` = '{status}' WHERE `admin`.`id` = {user_id}"
+    cursor.execute(query)
+
 
 # vehicles
 
