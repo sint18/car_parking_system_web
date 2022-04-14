@@ -9,8 +9,10 @@ import variables
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
 
-
+log = queries.log
 # login & logout
+
+
 @app.route("/", methods=["GET", "POST"])
 def login():
 
@@ -23,6 +25,10 @@ def login():
             if record[4] == "active":
                 session["u_id"] = record[0]
                 session["user"] = record[2]
+
+                # logging
+                log(record[0], f"{record[2]} logged in successfully")
+
             else:
                 error = "Account is deactivated"
         else:
@@ -47,6 +53,7 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
 
+    print()
     data = {
         "parked_vehicles": f"{queries.count_parked_vehicles()}/{variables.PARKING_LIMIT}",
         "categories": queries.count_categories(),
@@ -66,6 +73,11 @@ def user_management():
         u_id = request.form["formUserId"]
         status = request.form["formStatus"]
         queries.update_user_status(u_id, status)
+
+        # logging
+        msg = f"{session['user']} updated the status of the user with the id ''{u_id}''"
+        log(session["u_id"], msg)
+
     data = []
     records = queries.get_user_list()
     if records:
@@ -86,7 +98,11 @@ def add_user():
                 queries.insert_user(fullname, username,
                                     functions.get_hash(password))
 
-                return redirect(url_for("user_management"))
+                # logging
+                msg = f"{session['user']} added a new admin with the username ''{username}''"
+                log(session["u_id"], msg)
+
+        return redirect(url_for("user_management"))
 
     return render_template("user_management/add_new_user.html")
 
@@ -98,12 +114,22 @@ def delete(ltype):
 
         if u_id:
             queries.delete_user(int(u_id))
+
+            # logging
+            msg = f"{session['user']} deleted the user with the id ''{u_id}''"
+            log(session["u_id"], msg)
+
         return redirect(url_for("user_management"))
 
     if ltype == "category":
         c_id = request.args.get("c_id")
         if c_id:
             queries.delete_category(c_id)
+
+            # logging
+            msg = f"{session['user']} deleted the category with the id ''{c_id}''"
+            log(session["u_id"], msg)
+
         return redirect(url_for("category"))
 
 
@@ -122,11 +148,21 @@ def edit(ltype):
 
             if not new_pass and not old_pass and fullname and username:
                 queries.update_user(u_id, fullname, username)
+
+                # logging
+                msg = f"{session['user']} updated the details of the user with the id ''{u_id}''"
+                log(session["u_id"], msg)
+
                 return redirect(url_for("user_management"))
             elif new_pass and old_pass and fullname and username:
                 if functions.get_hash(old_pass) == record[0][3]:
                     queries.update_user(
                         u_id, fullname, username, functions.get_hash(new_pass))
+
+                    # logging
+                    msg = f"{session['user']} updated the password of the user with the id ''{u_id}''"
+                    log(session["u_id"], msg)
+
                     return redirect(url_for("user_management"))
                 else:
                     error = "Incorrect old password"
@@ -143,6 +179,11 @@ def edit(ltype):
             cat_desc = request.form["desc"]
 
             queries.update_category(c_id, cat_name, cat_desc)
+
+            # logging
+            msg = f"{session['user']} updated the category with the id ''{c_id}''"
+            log(session["u_id"], msg)
+
             return redirect(url_for("category"))
 
         return render_template("category/edit_category.html", data=record[0])
@@ -170,6 +211,11 @@ def add_category():
         cat_desc = request.form["desc"]
         if cat_name:
             queries.insert_category(cat_name, cat_desc)
+
+            # logging
+            msg = f"{session['user']} added a new category with the name ''{cat_name}''"
+            log(session["u_id"], msg)
+
             return redirect(url_for("category"))
 
     return render_template("category/add_new_category.html", msg=msg)
@@ -230,6 +276,11 @@ def vehicle_entry():
         if cat_id != "" and reg_num != "":
             queries.insert_vehicles(cat_id, reg_num)
             msg = f"New vehicle added with the reg no. {reg_num}"
+
+            # logging
+            msg = f"{session['user']} added a new vehicle with the reg no. ''{reg_num}''"
+            log(session["u_id"], msg)
+
     return redirect(url_for("vehicles", msg=msg))
 
 
@@ -274,6 +325,11 @@ def update_vehicle():
     if request.method == "POST":
         queries.update_vehicle(vehicle_id, exit_time,
                                int(fees), tdiff, fine)
+
+        # logging
+        msg = f"{session['user']} updated vehicle with the reg no. ''{record[2]}'' for out-going"
+        log(session["u_id"], msg)
+
         return redirect(url_for("vehicles"))
 
     return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees), other=other)
@@ -348,6 +404,10 @@ def register_member():
 
             # queries.register_member(reg_no, tier, start_date, valid_until)
 
+        # logging
+        msg = f"{session['user']} added a tier id ''{tier_id}'' membership for the reg no. ''{reg_no}''"
+        log(session["u_id"], msg)
+
     return redirect(url_for("view_members"))
     # records = queries.get_tiers()
     # return render_template("members/register_member.html", data=records, msg=msg)
@@ -358,6 +418,11 @@ def terminate_membership():
     if request.method == "POST":
         ms_id = request.form["selectMembershipId"]
         queries.revoke_membership(ms_id)
+
+        # logging
+        msg = f"{session['user']} terminated membership with the membership id ''{ms_id}''"
+        log(session["u_id"], msg)
+
     return redirect(url_for("view_members"))
 
 

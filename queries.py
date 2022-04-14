@@ -182,11 +182,11 @@ def delete_category(c_id: int):
 
 def get_member_info_by_id(plate_number):
     query = f"""SELECT members.member_id, members.plate_number, members.status,
-    membership_tier.discount, membership_tier.tier, membership_tier.cost, 
-    membership.start_date, membership.valid_until FROM membership 
-    INNER JOIN members ON members.member_id = membership.member_id 
-    INNER JOIN membership_tier ON membership.tier_id = membership_tier.id 
-    WHERE members.plate_number = '{plate_number}' 
+    membership_tier.discount, membership_tier.tier, membership_tier.cost,
+    membership.start_date, membership.valid_until FROM membership
+    INNER JOIN members ON members.member_id = membership.member_id
+    INNER JOIN membership_tier ON membership.tier_id = membership_tier.id
+    WHERE members.plate_number = '{plate_number}'
     ORDER BY membership.start_date DESC LIMIT 1"""
     cursor.execute(query)
     record = cursor.fetchone()
@@ -263,3 +263,10 @@ def get_member_info(member_id: int):
     cursor.execute(query)
     records = cursor.fetchall()
     return records
+
+
+# logging
+
+def log(admin_id: int, msg: str):
+    query = f"INSERT INTO `log` (`id`, `admin_id`, `datetime`, `msg`) VALUES (NULL, '{admin_id}', NOW(), '{msg}')"
+    cursor.execute(query)
