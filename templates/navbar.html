@@ -18,48 +18,79 @@
 </head>
 
 <body>
-    <div class="container-xxl my-3">
-        <div class="row" style="height: 95vh;">
-            <div class="col col-sm-auto d-flex flex-column">
-                <p class="h5 text-center mt-2">{{ session["user"] }}</p>
-                <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                            aria-haspopup="true" aria-expanded="false">Vehicles</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/vehicles">Entry/Exit Vehicles</a>
-                            <a class="dropdown-item" href="/categories">Vehicle Category</a>
-                            <a class="dropdown-item" href="/parking-history">Parking History</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                            aria-haspopup="true" aria-expanded="false">Membership</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/view-members">View Members</a>
-                            <a class="dropdown-item" href="/view-tiers">Tiers</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user-management">User Management</a>
-                    </li>
+    <div class="container-fluid">
+        <div class="row" style="">
+            <div class="col-md-auto">
+                <div class="d-flex flex-column p-3 bg-light" style="width: 240px; height: 100vh;">
+                    <a href="/"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                        <span class="fs-4">Car Parking System</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="/dashboard" class="nav-link link-dark" aria-current="page">
+                                <i class="bi bi-speedometer m-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link link-dark dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                                    role="button" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-cone-striped m-2"></i>
+                                    Vehicles
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/vehicles">Entry/Exit Vehicles</a>
+                                    <a class="dropdown-item" href="/categories">Vehicle Category</a>
+                                    <a class="dropdown-item" href="/parking-history">Parking History</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link link-dark dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                                    role="button" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-person-badge m-2"></i>
+                                    Membership
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/view-members">View Members</a>
+                                    <a class="dropdown-item" href="/view-tiers">Tiers</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/user-management" class="nav-link link-dark">
+                                <i class="bi bi-people-fill m-2"></i>
+                                User Management
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link link-dark">
+                                <i class="bi bi-clipboard2-pulse m-2"></i>
+                                Activity Log
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <!-- <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+                            id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
+                                class="rounded-circle me-2"> -->
+                    <div class="align-items-center">
+                        <p class="fs-3 text-center">{{ session["user"] }}</p>
+                        <a href="/logout" class="d-grid btn btn-danger">Logout</a>
+                    </div>
 
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                </ul>
-                <hr>
-                <div class="d-grid">
-                    <a href="/logout" class="btn btn-danger">Logout</a>
+                    <!-- </a>
+                        <ul class="dropdown-menu text-small shadow">
+                            <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        </ul>
+                    </div> -->
                 </div>
-
             </div>
 
             <div class="col">
