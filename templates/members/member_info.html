@@ -21,7 +21,7 @@ Car Parking System | Member Info
                         <th>Tier</th>
                         <th>Start Date</th>
                         <th>Valid Until</th>
-                        <th>Timeframe</th>
+                        <th>Expires</th>
                         <th>Paid</th>
                     </tr>
                 </thead>
@@ -41,7 +41,7 @@ Car Parking System | Member Info
 
         </form>
     </div>
-    <div class="col">
+    <div class="col" {{ 'hidden' if status=='inactive' else '' }}>
         <p class="h4">Terminate Membership</p>
         <form action="/terminate-membership" method="post">
             <div class="mb-3">

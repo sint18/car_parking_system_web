@@ -305,15 +305,25 @@ def view_member_info():
     m_id = request.args.get("m_id")
     records = queries.get_member_info(m_id)
     data = []
+    m_status = []
+    status = "inactive"
     if records:
         for row in records:
             new_list = list(row)
-            ddiff = row[4] - row[3]
+
+            ddiff = row[4] - datetime.date.today()
             cost = functions.format_currency(row[7])
+            if ddiff.days <= 0:
+                m_status.append("inactive")
+            else:
+                m_status.append("active")
             new_list.extend([ddiff, cost])
             data.append(tuple(new_list))
 
-    return render_template("members/member_info.html", data=data, msg=msg)
+    if "active" in m_status:
+        status = "active"
+
+    return render_template("members/member_info.html", data=data, msg=msg, status=status)
 
 
 @app.route("/register-member", methods=["GET", "POST"])
