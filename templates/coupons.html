@@ -1,0 +1,90 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Car Parking System | Coupon Management
+{% endblock %}
+
+{% block content%}
+<p class="h1">Coupon Management</p>
+
+<div class="mb-3">
+
+    <a href="/create-coupon" role="button" class="btn btn-primary">
+        <i class="bi bi-plus"></i>
+        Create Coupon
+    </a>
+
+    <table class="table" id="coupon_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Coupon Code</th>
+                <th>Discount</th>
+                <th>Creation Date</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data: %}
+            {% for row in data: %}
+            <tr>
+                <td class="align-middle">{{ row[0] }}</td>
+                <td class="align-middle">{{ row[1] }}</td>
+                <td class="align-middle">{{ row[2] }}%</td>
+                <td class="align-middle">{{ row[3] }}</td>
+                <td class="{{ 'table-success' if row[4] == 'active' else 'table-danger' }}">
+                    <select name="statusSel" class="form-select" id="" coupon_id="{{ row[0] }}">
+                        <option value="active" {{ 'selected' if row[4]=='active' else '' }}>Active</option>
+                        <option value="expired" {{ 'selected' if row[4]=='expired' else '' }}>Expired</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <!-- <button type="button" class="btn btn-secondary">Edit</button>
+                            <button type="button" class="btn btn-danger">Delete</button> -->
+                        <a href="/edit/coupon?coupon_id={{ row[0] }}" class="btn btn-secondary">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <a href="/delete/coupon?coupon_id={{ row[0] }}"
+                            onclick="return confirm('Are you sure you want to delete \'{{ row[2] }}\'?')"
+                            class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#coupon_table').DataTable({
+            "scrollY": "70vh",
+            "scrollCollapse": true,
+            "paging": false
+        });
+
+        var statusSels = document.getElementsByName('statusSel')
+        statusSels.forEach(element => {
+            element.onchange = function () {
+                $.post("/coupon-management", {
+                    formCouponId: this.getAttribute('coupon_id'),
+                    formStatus: this.value
+                }, function () {
+                    location.reload()
+                })
+            }
+
+        })
+    })
+</script>
+
+
+{% endblock%}

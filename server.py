@@ -146,6 +146,17 @@ def delete(ltype):
         queries.clear_history()
         return redirect(url_for("activity_log"))
 
+    elif ltype == "coupon":
+        coupon_id = request.args.get("coupon_id")
+        if coupon_id:
+            queries.delete_coupon(coupon_id)
+
+            # logging
+            msg = f"{session['user']} deleted the coupon with the id ''{coupon_id}''"
+            log(session["u_id"], msg)
+
+        return redirect(url_for("coupons"))
+
 
 @app.route("/edit/<ltype>", methods=["GET", "POST"])
 def edit(ltype):
@@ -201,6 +212,23 @@ def edit(ltype):
             return redirect(url_for("category"))
 
         return render_template("category/edit_category.html", data=record[0])
+
+    elif ltype == "coupon":
+        coupon_id = request.args.get("coupon_id")
+        if request.method == "POST":
+            coupon_code = request.form["coupon_code"]
+            discount = request.form["discount"]
+
+            queries.update_coupon(coupon_id, coupon_code, discount)
+
+            # logging
+            msg = f"{session['user']} updated the coupon with the id ''{coupon_id}''"
+            log(session["u_id"], msg)
+
+            return redirect(url_for("coupons"))
+
+        record = queries.get_coupon_by_id(coupon_id)
+        return render_template("coupon/edit_coupon.html", data=record)
 
 # category
 
@@ -266,6 +294,7 @@ def view_info():
                 ["Active", member_info[4], member_info[3], member_info[6], member_info[7]])
     if record[7]:
         other["fine"] = functions.format_currency(record[7])
+        other["remark"] = "Over Parked"
     return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]), other=other)
 
 
@@ -305,8 +334,8 @@ def update_vehicle():
 
     vehicle_id = request.args.get("v_id")
     record = queries.get_parked_vehicles_by_id(vehicle_id)
-    entry_time = record[0][3]  # entry time
-    exit_time = record[0][4]  # exit time
+    entry_time = record[3]  # entry time
+    exit_time = record[4]  # exit time
 
     rate_1, rate_2 = variables.RATE_1, variables.RATE_2
 
@@ -322,7 +351,7 @@ def update_vehicle():
     fine = None
     fees = functions.calculate_fees(
         total_hr, rate_1, rate_2)
-    member_info = queries.get_member_info_by_id(record[0][2])
+    member_info = queries.get_member_info_by_id(record[2])
     if member_info:
         member_status = member_info[2]
         if member_status == "active":
@@ -346,7 +375,7 @@ def update_vehicle():
 
         return redirect(url_for("vehicles"))
 
-    return render_template("vehicles/update_vehicle.html", data=record[0], fees=functions.format_currency(fees), other=other)
+    return render_template("vehicles/update_vehicle.html", data=record, fees=functions.format_currency(fees), other=other)
 
 # members
 
@@ -465,6 +494,44 @@ def activity_log():
     admin_id = session["u_id"]
     records = queries.get_activity_by_admin_id(admin_id)
     return render_template("activity_log/activity_log.html", admin_log=records)
+
+
+# coupons
+
+@app.route("/coupon-management", methods=["GET", "POST"])
+def coupons():
+
+    if request.method == "POST":
+        c_status = request.form["formStatus"]
+        c_id = request.form["formCouponId"]
+        queries.update_coupon_status(c_id, c_status)
+
+        # logging
+        if c_status == "active":
+            msg = f"{session['user']} activated the coupon with the id ''{c_id}''"
+            log(session["u_id"], msg)
+        elif c_status == "expired":
+            msg = f"{session['user']} deactivated the coupon with the id ''{c_id}''"
+            log(session["u_id"], msg)
+
+    data = queries.get_coupons()
+    return render_template("coupons.html", data=data)
+
+
+@app.route("/create-coupon", methods=["GET", "POST"])
+def new_coupon():
+    if request.method == "POST":
+        coupon_code = request.form["coupon_code"].upper()
+        discount = request.form["discount"]
+        queries.insert_coupon(coupon_code, discount)
+
+        # logging
+        msg = f"{session['user']} created a new coupon ''{coupon_code}''"
+        log(session["u_id"], msg)
+
+        return redirect(url_for("coupons"))
+
+    return render_template("coupon/add_new_coupon.html")
 
 
 if __name__ == "__main__":

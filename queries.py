@@ -126,8 +126,8 @@ def get_parked_vehicles():
 def get_parked_vehicles_by_id(v_id: int):
     query = f"SELECT vehicle_info.id, category.category_name, vehicle_info.plate_number, vehicle_info.in_time, NOW() AS exit_time, TIMEDIFF(now(), vehicle_info.in_time) AS parked_hours FROM vehicle_info INNER JOIN category ON vehicle_info.category_id=category.id WHERE vehicle_info.out_time IS NULL AND vehicle_info.id={v_id}"
     cursor.execute(query)
-    records = cursor.fetchall()
-    return records
+    record = cursor.fetchone()
+    return record
 
 
 def get_vehicle_info_by_id(v_id: int):
@@ -281,6 +281,42 @@ def delete_activity(act_id: int):
 
 def clear_history():
     query = "DELETE FROM log"
+    cursor.execute(query)
+
+# coupons
+
+
+def get_coupons():
+    query = "SELECT * FROM coupon"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
+
+
+def get_coupon_by_id(c_id: int):
+    query = f"SELECT * FROM coupon WHERE coupon_id = {c_id}"
+    cursor.execute(query)
+    record = cursor.fetchone()
+    return record
+
+
+def update_coupon(c_id: int, coupon_code: str, discount: int):
+    query = f"UPDATE `coupon` SET `coupon_code` = '{coupon_code}', `discount` = '{discount}' WHERE `coupon`.`coupon_id` = {c_id}"
+    cursor.execute(query)
+
+
+def update_coupon_status(c_id: int, status: str):
+    query = f"UPDATE `coupon` SET `status` = '{status}' WHERE `coupon`.`coupon_id` = {c_id}"
+    cursor.execute(query)
+
+
+def insert_coupon(coupon_code: str, discount: int):
+    query = f"INSERT INTO `coupon` (`coupon_id`, `coupon_code`, `discount`, `creation_date`, `status`) VALUES (NULL, '{coupon_code}', '{discount}', NOW(), 'active')"
+    cursor.execute(query)
+
+
+def delete_coupon(c_id: int):
+    query = f"DELETE FROM coupon WHERE coupon_id = {c_id}"
     cursor.execute(query)
 
 # logging

@@ -1,0 +1,34 @@
+{% extends "navbar.html" %}
+{% block title %}
+Car Parking System | Edit Coupon
+{% endblock %}
+
+{% block content %}
+<button class="btn btn-secondary mb-3" onclick="history.back()"><img class="white-svg"
+        src="/static/icons/arrow-left-short.svg" alt="" width="32" height="32">
+    Back</button>
+<p class="h1">Edit Coupon</p>
+<form action="/edit/coupon?coupon_id={{ data[0] }}" method="post">
+    {% if data: %}
+    <div class="mb-3">
+        <label for="coupon_code" class="form-label">Coupon Code</label>
+        <input type="text" class="form-control" style="text-transform: uppercase;" name="coupon_code" id="coupon_code"
+            placeholder="" value="{{ data[1] }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="discount" class="form-label">Discount (%)</label>
+        <input type="number" min="0" class="form-control" name="discount" id="discount" placeholder=""
+            value="{{ data[2] }}">
+    </div>
+    <div class="row">
+        <div class="col-3 d-grid">
+            <input type="submit" class="btn btn-primary" value="Update">
+        </div>
+        <div class="col-3 d-grid">
+            <input type="reset" class="btn btn-warning" value="Reset">
+        </div>
+    </div>
+    {% endif %}
+
+</form>
+{% endblock %}
