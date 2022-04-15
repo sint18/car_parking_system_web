@@ -264,8 +264,27 @@ def get_member_info(member_id: int):
     records = cursor.fetchall()
     return records
 
+# activity log
+
+
+def get_activity_by_admin_id(admin_id: int):
+    query = f"SELECT * FROM log WHERE admin_id = {admin_id} ORDER BY datetime DESC "
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
+
+
+def delete_activity(act_id: int):
+    query = f"DELETE FROM log WHERE id = {act_id}"
+    cursor.execute(query)
+
+
+def clear_history():
+    query = "DELETE FROM log"
+    cursor.execute(query)
 
 # logging
+
 
 def log(admin_id: int, msg: str):
     query = f"INSERT INTO `log` (`id`, `admin_id`, `datetime`, `msg`) VALUES (NULL, '{admin_id}', NOW(), '{msg}')"

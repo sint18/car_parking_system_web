@@ -75,8 +75,12 @@ def user_management():
         queries.update_user_status(u_id, status)
 
         # logging
-        msg = f"{session['user']} updated the status of the user with the id ''{u_id}''"
-        log(session["u_id"], msg)
+        if status == "active":
+            msg = f"{session['user']} activated the user with the id ''{u_id}''"
+            log(session["u_id"], msg)
+        elif status == "inactive":
+            msg = f"{session['user']} deactivated the user with the id ''{u_id}''"
+            log(session["u_id"], msg)
 
     data = []
     records = queries.get_user_list()
@@ -121,7 +125,7 @@ def delete(ltype):
 
         return redirect(url_for("user_management"))
 
-    if ltype == "category":
+    elif ltype == "category":
         c_id = request.args.get("c_id")
         if c_id:
             queries.delete_category(c_id)
@@ -131,6 +135,16 @@ def delete(ltype):
             log(session["u_id"], msg)
 
         return redirect(url_for("category"))
+
+    elif ltype == "activity":
+        act_id = request.args.get("act_id")
+        if act_id:
+            queries.delete_activity(act_id)
+        return redirect(url_for("activity_log"))
+
+    elif ltype == "all-activity":
+        queries.clear_history()
+        return redirect(url_for("activity_log"))
 
 
 @app.route("/edit/<ltype>", methods=["GET", "POST"])
@@ -442,6 +456,15 @@ def get_tiers(t_id):
     tier_record = queries.get_tier_by_id(t_id)
     print(tier_record)
     return jsonify(tier_record)
+
+
+# activity log
+
+@app.route("/activity-log")
+def activity_log():
+    admin_id = session["u_id"]
+    records = queries.get_activity_by_admin_id(admin_id)
+    return render_template("activity_log/activity_log.html", admin_log=records)
 
 
 if __name__ == "__main__":

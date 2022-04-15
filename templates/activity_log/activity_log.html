@@ -1,0 +1,55 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Car Parking System | Activity Log
+{% endblock %}
+
+{% block content%}
+<p class="h1">Activity Log</p>
+<button class="btn btn-danger" onclick="clearHistory()" id="clear_history">Clear History</button>
+<div class="mb-3">
+    <table class="table" id="activity_table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Activity ID</th>
+                <th>Time</th>
+                <th>Activity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in admin_log: %}
+            <tr>
+                <td>
+                    <a href="/delete/activity?act_id={{ row[0] }}" class="link-danger">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                </td>
+                <td class="align-middle">{{ row[0] }}</td>
+                <td class="align-middle">{{ row[2] }}</td>
+                <td class="align-middle">{{ row[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#activity_table').DataTable({
+            "scrollY": "70vh",
+            "scrollCollapse": true,
+            "paging": false
+        });
+
+    });
+
+    function clearHistory() {
+        if (confirm("Are you sure you want to clear all activities?") == true) {
+            window.location.href = '/delete/all-activity'
+        }
+    }
+</script>
+
+
+{% endblock%}

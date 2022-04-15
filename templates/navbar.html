@@ -68,34 +68,28 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link link-dark">
+                            <a href="/activity-log" class="nav-link link-dark">
                                 <i class="bi bi-clipboard2-pulse m-2"></i>
                                 Activity Log
                             </a>
                         </li>
                     </ul>
                     <hr>
-                    <!-- <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
-                            id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                                class="rounded-circle me-2"> -->
                     <div class="align-items-center">
                         <p class="fs-3 text-center">{{ session["user"] }}</p>
                         <a href="/logout" class="d-grid btn btn-danger">Logout</a>
                     </div>
 
-                    <!-- </a>
-                        <ul class="dropdown-menu text-small shadow">
-                            <li><a class="dropdown-item" href="#">Sign out</a></li>
-                        </ul>
-                    </div> -->
                 </div>
             </div>
 
-            <div class="col">
-                {% block content %}
-                {% endblock %}
+            <div class="col p-3 bg-light">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
             </div>
         </div>
 
