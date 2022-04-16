@@ -469,8 +469,15 @@ def terminate_membership():
     return redirect(url_for("view_members"))
 
 
-@app.route("/view-tiers")
+@app.route("/view-tiers", methods=["GET", "POST"])
 def view_tiers():
+
+    if request.method == "POST":
+        tierName = request.form["tierName"]
+        discount = request.form["discount"]
+        price = request.form["price"]
+        queries.insert_tier(tierName, price, discount)
+
     tier_records = queries.get_tiers()
     tier_data = []
     for row in tier_records:
@@ -480,14 +487,29 @@ def view_tiers():
     return render_template("members/view_tiers.html", tier_data=tier_data)
 
 
-@app.route("/get-tiers/<t_id>")
-def get_tiers(t_id):
+@app.route("/get-tier/<t_id>")
+def get_tier(t_id):
     tier_record = queries.get_tier_by_id(t_id)
     print(tier_record)
     return jsonify(tier_record)
 
 
+@app.route("/update-tier", methods=["GET", "POST"])
+def update_tier():
+    if request.method == "POST":
+        tier_id = request.form["selectTierId"]
+        tierName = request.form["tierName"]
+        discount = request.form["discount"]
+        price = request.form["price"]
+
+        if tier_id:
+            queries.update_tier(tier_id, tierName, price, discount)
+
+    return redirect(url_for("view_tiers"))
+
+
 # activity log
+
 
 @app.route("/activity-log")
 def activity_log():

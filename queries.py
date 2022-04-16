@@ -214,6 +214,16 @@ def get_tier_by_id(t_id: int):
     return record
 
 
+def update_tier(t_id: int, t_name: str, t_cost: int, t_dis: int):
+    query = f"UPDATE `membership_tier` SET `tier` = '{t_name}', `cost` = '{t_cost}', `discount` = '{t_dis}' WHERE `membership_tier`.`id` = {t_id}"
+    cursor.execute(query)
+
+
+def insert_tier(t_name: str, t_cost: int, t_dis: int):
+    query = f"INSERT INTO `membership_tier` (`id`, `tier`, `cost`, `discount`) VALUES (NULL, '{t_name}', '{t_cost}', '{t_dis}')"
+    cursor.execute(query)
+
+
 def extend_member(member_id, tier_id, start_date, valid_until):
     query = f"INSERT INTO `membership` (`id`, `member_id`, `tier_id`, `start_date`, `valid_until`) VALUES (NULL, '{member_id}', '{tier_id}', '{start_date}', '{valid_until}')"
     cursor.execute(query)

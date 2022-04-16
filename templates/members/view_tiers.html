@@ -6,7 +6,10 @@ Car Parking System | View Tiers
 
 {% block content%}
 <p class="h1">Membership Tiers</p>
-<button class="btn btn-secondary mb-3" onclick=""><i class="bi bi-plus"></i> Add</button>
+<select name="" class="form-select" onchange="loadForm(this)" style="width: 100px;" id="">
+    <option value="edit">Edit</option>
+    <option value="add">Add</option>
+</select>
 <div class="row mb-3">
     <div class="col">
         <table class="table" id="member_table">
@@ -16,7 +19,6 @@ Car Parking System | View Tiers
                     <th>Tier Name</th>
                     <th>Discount</th>
                     <th>Price</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -27,23 +29,25 @@ Car Parking System | View Tiers
                     <td class="align-middle">{{ row[1] }}</td>
                     <td class="align-middle">{{ row[3] }}%</td>
                     <td class="align-middle">{{ row[2] }}</td>
-                    <td>
-                        <a href="" class="btn btn-secondary"><i class="bi bi-pencil-square"></i></a>
-                        <a href="" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
-                    </td>
                 </tr>
                 {% endfor %}
                 {% endif %}
             </tbody>
         </table>
     </div>
-    <div class="col" hidden>
+    <div class="col" id="editTierForm">
         <p class="h4">Edit Tier</p>
-        <div class="mb-3">
-            <label for="tierId" class="form-label">ID</label>
-            <input type="text" class="form-control" name="tierId" id="tierId" readonly>
-        </div>
-        <form action="" method="post">
+
+        <form action="/update-tier" method="post">
+            <div class="mb-3">
+                <label for="selectTierId" class="form-label">ID</label>
+                <select name="selectTierId" id="selectTierId" class="form-select">
+                    <option value="">Select Tier ID</option>
+                    {% for row in tier_data: %}
+                    <option value="{{ row[0] }}">{{ row[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="tierName" class="form-label">Name</label>
                 <input type="text" class="form-control" name="tierName" id="tierName" placeholder="" required>
@@ -51,19 +55,41 @@ Car Parking System | View Tiers
 
             <div class="mb-3">
                 <label for="discount" class="form-label">Discount</label>
-                <input type="text" class="form-control" name="discount" id="discount" placeholder="" required>
+                <input type="number" min="0" class="form-control" name="discount" id="discount" placeholder="" required>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" name="price" id="price" placeholder="" required>
+                <input type="number" min="0" class="form-control" name="price" id="price" placeholder="" required>
             </div>
             <div class="row">
                 <div class="col-3 d-grid">
                     <input type="submit" class="btn btn-primary" value="Update">
                 </div>
-                <!-- <div class="col-3 d-grid">
-                    <input type="reset" class="btn btn-warning" value="Reset">
-                </div> -->
+            </div>
+
+        </form>
+    </div>
+    <div class="col" id="addTierForm" hidden>
+        <p class="h4">Add Tier</p>
+
+        <form action="/view-tiers" method="post">
+            <div class="mb-3">
+                <label for="tierName" class="form-label">Name</label>
+                <input type="text" class="form-control" name="tierName" id="tierName" placeholder="" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="discount" class="form-label">Discount</label>
+                <input type="number" min="0" class="form-control" name="discount" id="discount" placeholder="" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" min="0" class="form-control" name="price" id="price" placeholder="" required>
+            </div>
+            <div class="row">
+                <div class="col-3 d-grid">
+                    <input type="submit" class="btn btn-primary" value="Add">
+                </div>
             </div>
 
         </form>
@@ -84,7 +110,7 @@ Car Parking System | View Tiers
         var price = document.getElementById("price")
         selectTierId.onchange = function () {
             if (this.value != "") {
-                $.get(`/get-tiers/${this.value}`, function (data) {
+                $.get(`/get-tier/${this.value}`, function (data) {
                     tierName.value = data[1]
                     discount.value = data[3]
                     price.value = data[2]
@@ -94,6 +120,25 @@ Car Parking System | View Tiers
         }
 
     });
+
+    function loadForm(element) {
+        if (element.value === "add") {
+
+            var addForm = document.getElementById("addTierForm")
+            addForm.removeAttribute("hidden")
+
+            var editForm = document.getElementById("editTierForm")
+            editForm.setAttribute("hidden", null)
+
+        } else {
+            var addForm = document.getElementById("addTierForm")
+            addForm.setAttribute("hidden", null)
+
+            var editForm = document.getElementById("editTierForm")
+            editForm.removeAttribute("hidden")
+        }
+    }
+
 </script>
 
 

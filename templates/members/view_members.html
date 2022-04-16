@@ -45,18 +45,19 @@ Car Parking System | View Membership
                 <select class="form-select" id="tierSel" name="tierSel">
                     {% if tier_data: %}
                     {% for row in tier_data: %}
-                    <option value="{{ row[0] }}">{{ row[1] }} | Discount - {{ row[3] }}% | Fees - {{ row[2] }} MMK
+                    <option value="{{ row[0] }}">
+                        {{ row[1] }} | Discount - {{ row[3] }}% | Fees - {{ row[2] }} MMK
                     </option>
                     {% endfor %}
                     {% endif %}
                 </select>
             </div>
             <div class="mb-3">
-                <label for="startDate" class="form-label"></label>
+                <label for="startDate" class="form-label">Start Date</label>
                 <input type="date" class="form-control" name="startDate" id="startDate" placeholder="" required>
             </div>
             <div class="mb-3">
-                <label for="validUntil" class="form-label"></label>
+                <label for="validUntil" class="form-label">Valid Until</label>
                 <input type="date" class="form-control" name="validUntil" id="validUntil" placeholder="" required>
             </div>
             <div class="row">
