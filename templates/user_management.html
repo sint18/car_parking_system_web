@@ -44,9 +44,7 @@ Car Parking System | Admin Management
                             <i class="bi bi-pencil-square"></i>
                         </a>
 
-                        <a href="/delete/user?u_id={{ row[0] }}"
-                            onclick="return confirm('Are you sure you want to delete \'{{ row[2] }}\'?')"
-                            class="btn btn-danger">
+                        <a onclick="confirmation('{{ row[0] }}')" class="btn btn-danger">
                             <i class="bi bi-trash-fill"></i>
                         </a>
                     </div>
@@ -59,6 +57,33 @@ Car Parking System | Admin Management
 </div>
 
 <script>
+
+    function confirmation(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to delete '${id}'?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#BB2D3B',
+            cancelButtonColor: '#0D6EFD',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.get(`/delete/user?u_id=${id}`)
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: `User with the id '${id}' has been deleted`,
+                    icon: 'success',
+                    confirmButtonColor: '#0D6EFD'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload()
+                    }
+                })
+            }
+        })
+    }
+
 
     $(document).ready(function () {
         $('#user_table').DataTable({

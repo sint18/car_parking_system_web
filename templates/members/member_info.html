@@ -43,10 +43,10 @@ Car Parking System | Member Info
     </div>
     <div class="col" {{ 'hidden' if status=='inactive' else '' }}>
         <p class="h4">Terminate Membership</p>
-        <form action="/terminate-membership" method="post">
+        <form action="">
             <div class="mb-3">
                 <label for="startDate" class="form-label">Select ID</label>
-                <select name="selectMembershipId" class="form-select" id="">
+                <select name="selectMembershipId" class="form-select" id="selectMembershipId">
                     {% for row in data: %}
                     <option value="{{ row[0] }}">{{ row[0] }}</option>
                     {% endfor %}
@@ -54,8 +54,7 @@ Car Parking System | Member Info
             </div>
             <div class="row">
                 <div class="col-3 d-grid">
-                    <input type="submit" class="btn btn-danger"
-                        onclick="return confirm('Are you sure you want to terminate membership?')" value="Terminate">
+                    <input type="button" class="btn btn-danger" onclick="confirmation()" value="Terminate">
                 </div>
                 <div class="col-3 d-grid">
                     <input type="reset" class="btn btn-warning" value="Reset">
@@ -66,5 +65,36 @@ Car Parking System | Member Info
     </div>
 
 </div>
+<script>
+    var membershipId = document.getElementById("selectMembershipId").value
+    function confirmation() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to terminate membership for the id '${membershipId}'?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#BB2D3B',
+            cancelButtonColor: '#0D6EFD',
+            confirmButtonText: 'Yes, do it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("/terminate-membership", {
+                    selectMembershipId: membershipId
+                })
+                Swal.fire({
+                    title: 'Terminated!',
+                    text: `Membership with the id '${membershipId}' has been terminated`,
+                    icon: 'success',
+                    confirmButtonColor: '#0D6EFD'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload()
+                    }
+                })
+            }
+        })
+    }
+
+</script>
 
 {% endblock %}

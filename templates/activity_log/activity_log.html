@@ -35,6 +35,33 @@ Car Parking System | Activity Log
 </div>
 
 <script>
+
+    function clearHistory() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to clear all activity history?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#BB2D3B',
+            cancelButtonColor: '#0D6EFD',
+            confirmButtonText: 'Yes, do it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.get(`/delete/all-activity`)
+                Swal.fire({
+                    title: 'Done!',
+                    text: `Activity History has been cleared`,
+                    icon: 'success',
+                    confirmButtonColor: '#0D6EFD'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload()
+                    }
+                })
+            }
+        })
+    }
+
     $(document).ready(function () {
         $('#activity_table').DataTable({
             "paging": true,
@@ -42,12 +69,6 @@ Car Parking System | Activity Log
         });
 
     });
-
-    function clearHistory() {
-        if (confirm("Are you sure you want to clear all activities?") == true) {
-            window.location.href = '/delete/all-activity'
-        }
-    }
 </script>
 
 

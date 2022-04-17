@@ -36,9 +36,7 @@ Car Parking System | Category List
                         <a href="/edit/category?c_id={{ row[0] }}" class="btn btn-secondary">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <a href="/delete/category?c_id={{ row[0] }}"
-                            onclick="return confirm('Are you sure you want to delete \'{{ row[1] }}\'?')"
-                            class="btn btn-danger">
+                        <a onclick="confirmation('{{ row[0] }}')" class="btn btn-danger">
                             <i class="bi bi-trash-fill"></i>
                         </a>
                     </div>
@@ -51,6 +49,32 @@ Car Parking System | Category List
 </div>
 
 <script>
+
+    function confirmation(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to delete '${id}'?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#BB2D3B',
+            cancelButtonColor: '#0D6EFD',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.get(`/delete/category?c_id=${id}`)
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: `Category with the id '${id}' has been deleted`,
+                    icon: 'success',
+                    confirmButtonColor: '#0D6EFD'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload()
+                    }
+                })
+            }
+        })
+    }
 
     $(document).ready(function () {
         $('#category_table').DataTable({
