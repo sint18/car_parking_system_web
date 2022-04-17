@@ -296,8 +296,11 @@ def view_info():
     fine, coupon = "", ""
     try:
         fine, coupon = record[7].split("|")
-    except ValueError and AttributeError:
+    except ValueError:
         pass
+    except AttributeError:
+        pass
+
     if coupon != "None" and coupon:
         c_info = queries.get_coupon_by_code(coupon)
         other["coupon"].extend([c_info[1], c_info[2]])
@@ -346,9 +349,6 @@ def update_vehicle():
     vehicle_id = request.args.get("v_id")
     coupon_id = request.args.get("coupon_id")
 
-    # test
-    print(f"V_ID :{vehicle_id}")
-    print(f"coupon id :{coupon_id}")
     coupon_code = ""
     if coupon_id:
         coupon = queries.get_coupon_by_id(coupon_id)
@@ -404,7 +404,6 @@ def update_vehicle():
         log(session["u_id"], msg)
 
         return redirect(url_for("vehicles"))
-    print(other)
     return render_template("vehicles/update_vehicle.html", data=record, fees=functions.format_currency(fees), other=other)
 
 # members
