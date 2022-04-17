@@ -19,9 +19,6 @@
     margin-bottom: auto !important;
 }
 
-.white-svg {
-    filter: invert(99%) sepia(0%) saturate(4882%) hue-rotate(306deg) brightness(119%) contrast(100%);
-}
 
 .bg {
     background-color: aqua;

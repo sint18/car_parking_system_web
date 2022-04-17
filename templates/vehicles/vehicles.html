@@ -76,9 +76,8 @@ Car Parking System | Vehicles
     $(document).ready(function () {
         $('#vehicle_table').DataTable({
             "order": [[3, 'desc']],
-            "scrollY": "70vh",
-            "scrollCollapse": true,
-            "paging": false
+            "paging": true,
+            "lengthChange": false
         });
     });
 </script>

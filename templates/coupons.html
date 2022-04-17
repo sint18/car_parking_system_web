@@ -66,9 +66,8 @@ Car Parking System | Coupon Management
 
     $(document).ready(function () {
         $('#coupon_table').DataTable({
-            "scrollY": "70vh",
-            "scrollCollapse": true,
-            "paging": false
+            "paging": true,
+            "lengthChange": false
         });
 
         var statusSels = document.getElementsByName('statusSel')

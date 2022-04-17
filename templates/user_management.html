@@ -62,9 +62,8 @@ Car Parking System | Admin Management
 
     $(document).ready(function () {
         $('#user_table').DataTable({
-            "scrollY": "70vh",
-            "scrollCollapse": true,
-            "paging": false
+            "paging": true,
+            "lengthChange": false
         });
 
         var statusSels = document.getElementsByName('statusSel')

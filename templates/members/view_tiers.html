@@ -99,9 +99,8 @@ Car Parking System | View Tiers
 <script>
     $(document).ready(function () {
         $('#member_table').DataTable({
-            "scrollY": "70vh",
-            "scrollCollapse": true,
-            "paging": false
+            "paging": true,
+            "lengthChange": false
         });
 
         var selectTierId = document.getElementById("selectTierId")

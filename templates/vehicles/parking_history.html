@@ -42,9 +42,8 @@ Car Parking System | Parking History
     $(document).ready(function () {
         $('#vehicle_table').DataTable({
             "order": [[4, 'desc']],
-            "scrollY": "70vh",
-            "scrollCollapse": true,
-            "paging": false
+            "paging": true,
+            "lengthChange": false
         });
     });
 </script>
