@@ -45,6 +45,12 @@ Car Parking System | Vehicle Information
                         <td>{{ other["membership"][2] }}% Applied</td>
                     </tr>
                     {% endif %}
+                    {% if other["coupon"]: %}
+                    <tr>
+                        <th>Coupon Discount</th>
+                        <td>{{ other["coupon"][1] }}% OFF</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th>Fees</th>
                         <td style="font-size: 5ex;">{{ fees }}</td>
@@ -97,6 +103,12 @@ Car Parking System | Vehicle Information
                         {% endif %}
 
                     </tr>
+                    {% if other["coupon"]: %}
+                    <tr>
+                        <th>Coupon Code</th>
+                        <td>{{ other["coupon"][0] }}</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>

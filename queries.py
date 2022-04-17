@@ -303,6 +303,20 @@ def get_coupons():
     return records
 
 
+def get_active_coupons():
+    query = "SELECT * FROM coupon WHERE status = 'active'"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    return records
+
+
+def get_coupon_by_code(code: str):
+    query = f"SELECT * FROM coupon WHERE coupon_code = '{code}'"
+    cursor.execute(query)
+    record = cursor.fetchone()
+    return record
+
+
 def get_coupon_by_id(c_id: int):
     query = f"SELECT * FROM coupon WHERE coupon_id = {c_id}"
     cursor.execute(query)

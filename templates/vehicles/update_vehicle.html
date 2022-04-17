@@ -9,121 +9,139 @@ Car Parking System | Vehicle Exit
     Back</button>
 <p class="h1">Vehicle Exit</p>
 {% if data and fees: %}
-<form action="/update-vehicle?v_id={{ data[0] }}" method="post">
-    <div class="row">
-        <div class="col">
-            <p class="h5">Parking Info</p>
 
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th>Vehicle ID</th>
-                        <td>{{ data[0] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Registration No.</th>
-                        <td>{{ data[2] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Category</th>
-                        <td>{{ data[1] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Entry Time</th>
-                        <td>{{ data[3] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Exit Time</th>
-                        <td>{{ data[4] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Hours Parked</th>
-                        <td>{{ data[5] }}</td>
-                    </tr>
-                    {% if other["membership"]: %}
-                    <tr>
-                        <th>Discount</th>
-                        <td>{{ other["membership"][2] }}% Applied</td>
-                    </tr>
+<div class="row">
+    <div class="col">
+        <p class="h5">Parking Info</p>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Vehicle ID</th>
+                    <td>{{ data[0] }}</td>
+                </tr>
+                <tr>
+                    <th>Registration No.</th>
+                    <td>{{ data[2] }}</td>
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td>{{ data[1] }}</td>
+                </tr>
+                <tr>
+                    <th>Entry Time</th>
+                    <td>{{ data[3] }}</td>
+                </tr>
+                <tr>
+                    <th>Exit Time</th>
+                    <td>{{ data[4] }}</td>
+                </tr>
+                <tr>
+                    <th>Hours Parked</th>
+                    <td>{{ data[5] }}</td>
+                </tr>
+                {% if other["membership"]: %}
+                <tr>
+                    <th>Discount</th>
+                    <td>{{ other["membership"][2] }}% Applied</td>
+                </tr>
+                {% endif %}
+
+                {% if other["coupon"]: %}
+                <tr>
+                    <th>Coupon Discount</th>
+                    <td>{{ other["coupon"][2] }}% OFF</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Fees</th>
+                    <td style="font-size: 5ex;">{{ fees }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col">
+        <p class="h5">Other Info</p>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Fine</th>
+                    {% if other["fine"]: %}
+                    <td>{{ other["fine"] }}</td>
+                    {% else: %}
+                    <td>No fine</td>
                     {% endif %}
-                    <tr>
-                        <th>Fees</th>
-                        <td style="font-size: 5ex;">{{ fees }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-        <div class="col">
-            <p class="h5">Other Info</p>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th>Fine</th>
-                        {% if other["fine"]: %}
-                        <td>{{ other["fine"] }}</td>
-                        {% else: %}
-                        <td>No fine</td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <th>Membership Status</th>
-                        {% if other["membership"]: %}
-                        <td class="table-success">{{ other["membership"][0] }}</td>
-                        {% else: %}
-                        <td class="table-danger">Inactive</td>
-                        {% endif %}
-                    </tr>
+                </tr>
+                <tr>
+                    <th>Membership Status</th>
                     {% if other["membership"]: %}
-                    <tr>
-                        <th>Membership Tier</th>
-                        <td class="">{{ other["membership"][1] }}</td>
-
-                    </tr>
-                    <tr>
-                        <th>Start Date</th>
-                        <td>{{ other["membership"][3] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Valid Until</th>
-                        <td>{{ other["membership"][4] }}</td>
-                    </tr>
+                    <td class="table-success">{{ other["membership"][0] }}</td>
+                    {% else: %}
+                    <td class="table-danger">Inactive</td>
                     {% endif %}
-                    <tr>
-                        <th>Remark</th>
-                        {% if other["remark"]: %}
-                        <td class="" style="color: #BB2D3B;"><b>{{ other["remark"] }}</b></td>
-                        {% else: %}
-                        <td>No remark</td>
-                        {% endif %}
+                </tr>
+                {% if other["membership"]: %}
+                <tr>
+                    <th>Membership Tier</th>
+                    <td class="">{{ other["membership"][1] }}</td>
 
-                    </tr>
-                </tbody>
-            </table>
-            <p>
-                <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#applyCoupon" aria-expanded="false" aria-controls="applyCoupon">
-                    Coupon
-                </button>
-            </p>
+                </tr>
+                <tr>
+                    <th>Start Date</th>
+                    <td>{{ other["membership"][3] }}</td>
+                </tr>
+                <tr>
+                    <th>Valid Until</th>
+                    <td>{{ other["membership"][4] }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Remark</th>
+                    {% if other["remark"]: %}
+                    <td class="" style="color: #BB2D3B;"><b>{{ other["remark"] }}</b></td>
+                    {% else: %}
+                    <td>No remark</td>
+                    {% endif %}
 
-            <div class="collapse" id="applyCoupon">
+                </tr>
+                {% if other["coupon"]: %}
+                <tr>
+                    <th>Coupon Code</th>
+                    <td>{{ other["coupon"][1] }}</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <p>
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#applyCoupon" aria-expanded="false" aria-controls="applyCoupon">
+                Coupon
+            </button>
+        </p>
+
+        <form action="/update-vehicle" method="get" id="couponForm">
+            <input type="hidden" value="{{ data[0] }}" name="v_id">
+            <input type="hidden" value="" name="coupon_id" id="coupon_idInput">
+            <div class=" collapse" id="applyCoupon">
                 <div class="card card-body shadow-sm" style="width: fit-content;">
                     <div class="row">
                         <div class="col-auto">
-                            <input type="text" class="form-control" placeholder="Coupon Code">
+                            <input type="text" style="text-transform: uppercase;" class="form-control"
+                                placeholder="Coupon Code" id="couponCodeInput">
                         </div>
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Apply</button>
+                            <button id="btnApply" onclick="applyCoupon()" type="submit" class="btn btn-primary"
+                                disabled>Apply</button>
                         </div>
                     </div>
 
                 </div>
             </div>
-
-        </div>
+        </form>
     </div>
-
+</div>
+<form action="/update-vehicle?v_id={{ data[0] }}" id="updateForm" method="post">
     <div class="row">
         <div class="col-3 d-grid">
             <input type="submit" class="btn btn-primary" value="Submit">
@@ -132,7 +150,59 @@ Car Parking System | Vehicle Exit
             <input type="reset" class="btn btn-warning" value="Reset">
         </div>
     </div>
-
 </form>
 {% endif %}
+
+<script>
+
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+    var couponObj = {}
+    $(document).ready(function () {
+
+        var couponExists = Boolean("{{ 'true' if other['coupon'] else '' }}")
+
+        if (couponExists) {
+            var couponId = '{{ other["coupon"][0] }}'
+            var updateForm = document.getElementById("updateForm")
+            updateForm.action = `/update-vehicle?v_id={{ data[0] }}&coupon_id=${couponId}`
+        }
+
+
+        var btnApply = document.getElementById('btnApply')
+        $.get("/get-coupons", function (dataArr) {
+            dataArr.forEach(element => {
+                couponObj[element[0]] = element[1]
+            });
+        })
+        console.log(couponObj)
+        $('#couponCodeInput').on('input', function () {
+            var couponCode = $(this).val().toUpperCase()
+            if (Object.values(couponObj).includes(couponCode)) {
+                this.classList.add('is-valid')
+                btnApply.removeAttribute('disabled')
+            } else {
+                this.classList.remove('is-valid')
+                btnApply.setAttribute('disabled', null)
+            }
+        })
+
+    })
+
+    function applyCoupon() {
+
+        var couponIdInput = document.getElementById("coupon_idInput")
+        var couponCode = document.getElementById('couponCodeInput').value.toUpperCase()
+
+        var coupon_id = getKeyByValue(couponObj, couponCode)
+        if (coupon_id && couponCode) {
+            couponIdInput.value = coupon_id
+        }
+    }
+
+
+
+</script>
+
 {% endblock %}

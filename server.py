@@ -281,6 +281,7 @@ def view_info():
 
     other = {
         "remark": "",
+        "coupon": [],
         "fine": 0,
         "membership": []
     }
@@ -292,9 +293,19 @@ def view_info():
         if member_status == "active":
             other["membership"].extend(
                 ["Active", member_info[4], member_info[3], member_info[6], member_info[7]])
-    if record[7]:
-        other["fine"] = functions.format_currency(record[7])
+    fine, coupon = "", ""
+    try:
+        fine, coupon = record[7].split("|")
+    except ValueError and AttributeError:
+        pass
+    if coupon != "None" and coupon:
+        c_info = queries.get_coupon_by_code(coupon)
+        other["coupon"].extend([c_info[1], c_info[2]])
+
+    if fine != "None" and fine:
+        other["fine"] = functions.format_currency(fine)
         other["remark"] = "Over Parked"
+
     return render_template("vehicles/vehicle_info.html", data=record, fees=functions.format_currency(record[5]), other=other)
 
 
@@ -333,6 +344,17 @@ def update_vehicle():
         return redirect(url_for("login"))
 
     vehicle_id = request.args.get("v_id")
+    coupon_id = request.args.get("coupon_id")
+
+    # test
+    print(f"V_ID :{vehicle_id}")
+    print(f"coupon id :{coupon_id}")
+    coupon_code = ""
+    if coupon_id:
+        coupon = queries.get_coupon_by_id(coupon_id)
+        coupon_code = coupon[1]
+        coupon_discount = coupon[2]
+
     record = queries.get_parked_vehicles_by_id(vehicle_id)
     entry_time = record[3]  # entry time
     exit_time = record[4]  # exit time
@@ -345,6 +367,7 @@ def update_vehicle():
     total_hr = tdiff.total_seconds()/3600
     other = {
         "remark": "",
+        "coupon": [],
         "fine": 0,
         "membership": []
     }
@@ -359,6 +382,12 @@ def update_vehicle():
                 ["Active", member_info[4], member_info[3], member_info[6], member_info[7]])
             discount = member_info[3] / 100
             fees = fees - (fees * discount)
+
+    if coupon_code and coupon_discount:
+        other["coupon"].extend([coupon_id, coupon_code, coupon_discount])
+        discount = coupon_discount/100
+        fees = fees - (fees * discount)
+
     if tdiff > t_limit:
         fine = variables.FINE
         other["remark"] = "Over Parked"
@@ -366,15 +395,16 @@ def update_vehicle():
         fees = fees + fine
 
     if request.method == "POST":
+        info = f"{fine}|{coupon_code if coupon_code else 'None'}"
         queries.update_vehicle(vehicle_id, exit_time,
-                               int(fees), tdiff, fine)
+                               int(fees), tdiff, info)
 
         # logging
         msg = f"{session['user']} updated vehicle with the reg no. ''{record[2]}'' for out-going"
         log(session["u_id"], msg)
 
         return redirect(url_for("vehicles"))
-
+    print(other)
     return render_template("vehicles/update_vehicle.html", data=record, fees=functions.format_currency(fees), other=other)
 
 # members
@@ -554,6 +584,12 @@ def new_coupon():
         return redirect(url_for("coupons"))
 
     return render_template("coupon/add_new_coupon.html")
+
+
+@app.route("/get-coupons")
+def get_coupons():
+    records = queries.get_active_coupons()
+    return jsonify(records)
 
 
 if __name__ == "__main__":
