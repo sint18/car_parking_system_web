@@ -27,3 +27,13 @@
 .bg1 {
     background-color: blueviolet;
 }
+
+body,
+div.container-fluid>div.row>div.col-md-auto>div,
+div.container-fluid>div.row>div.col {
+    background-color: #EFFFFD !important;
+}
+
+/* div.card {
+    background-color: #EFFEFF !important;
+} */
